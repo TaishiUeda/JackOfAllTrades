@@ -1,0 +1,3 @@
+/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/build/CMakeFiles/rebuild_cache.dir
+/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/build/CMakeFiles/edit_cache.dir
+/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/build/CMakeFiles/CppSqlPerserTest.dir

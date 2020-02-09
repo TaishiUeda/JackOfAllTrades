@@ -1,7 +1,8 @@
 #ifndef CPPSQLPARSER_HPP
 #define CPPSQLPARSER_HPP
-#include <sqlite.h>
+#include <sqlite3.h>
 #include <string>
+#include <vector>
 #include <list>
 #include <map>
 
@@ -45,19 +46,19 @@ namespace csp{
 	     * \retval true success
 	     * \retval false type of value and that of Data are different.
 	     */
-	    template<T_OUT>
+	    template<typename T_OUT>
 		bool get(T_OUT& value);
 	    /*! Set value
 	     * \param[in] value to set.
 	     */
-	    template<T_IN>
+	    template<typename T_IN>
 		void set(const T_IN& value);
 	    /*! Change value. If a value of different type from Data, it returns false.
 	     * \param[in] value to set.
 	     * \retval true success
 	     * \retval false type of value and that of Data are different.
 	     */
-	    template<T_IN>
+	    template<typename T_IN>
 		bool change(const T_IN& value);
 	private:
 	    bool is_key_{false};
@@ -80,12 +81,12 @@ namespace csp{
      * };
      *
      * // Set values
-     * col["ID"].set(0);
-     * col["First name"].set("Alina");
-     * col["Second name"].set("Rain");
-     * col["Age"].set(28)}]
-     * col["Height_cm"].set(165.7);
-     * col["Weight_kg"].set(49.3);
+     * col["ID"].change(0);
+     * col["First name"].change("Alina");
+     * col["Second name"].change("Rain");
+     * col["Age"].change(28)}]
+     * col["Height_cm"].change(165.7);
+     * col["Weight_kg"].change(49.3);
      * ```
      */
     using Column_t = std::map<std::string, Data>;
@@ -110,15 +111,15 @@ namespace csp{
      * ```
      *
      */
-    using Table_t  = std::list<Column_t>;
+    using ColumnList_t  = std::list<Column_t>;
 
     //! Database type containing multiple tables.
     /*! An example of creating a table.
      *
      * ```cpp
      * DataBase_t db_1 = {
-     *     {"Table_1", table_1},
-     *     {"Table_2", table_2},
+     *     {"Table_1", column_list_1},
+     *     {"Table_2", column_list_2},
      * };
      * ```
      *
@@ -126,21 +127,25 @@ namespace csp{
      *
      * ```cpp
      * DataBase_t db_1;
-     * db_1["Table_1"] = table_1;
-     * db_1["Table_2"] = table_2;
+     * db_1["Table_1"] = column_list_1;
+     * db_1["Table_2"] = column_list_2;
      * ```
      */
-    using DataBase_t  = std::map<std::string, Table_t>;
+    using DataBase_t  = std::map<std::string, ColumnList_t>;
 
-    std::string create(const Table_t& obj, std::string& err_msg);
-    std::string update(const Column_t& col, const int64_t& key, std::string& err_msg);
-    std::string update(const Column_t& col, std::string& err_msg);
-    std::string insert(const Column_t& col, std::string& err_msg);
+    using ErrList_t = std::vector<std::string>;
+    using Result_t = std::vector<std::map<std::string, std::string>>;
 
-    using ErrList_t = std::list<std::string>;
-    ErrList_t exec(const std::string& query);
-    Table_t select(const std::string& query);
-
+    class CppSqlParser{
+	public:
+	    Result_t exec(const std::string& query, ErrList_t& err);
+	    ColumnList_t select(const std::string& where, ErrList_t& err);
+	    DataBase_t getMaster(ErrList_t& err);
+	    std::string createTable(const std::string& name, const ColumnList_t& obj, std::string& err_msg);
+	    std::string createTable(const DataBase_t& obj, std::string& err_msg);
+	    std::string insert(const Column_t& col, std::string& err_msg);
+	    std::string update(const Column_t& col, const int64_t& key, std::string& err_msg);
+	    std::string update(const Column_t& col, std::string& err_msg);
     };
 }
 #endif

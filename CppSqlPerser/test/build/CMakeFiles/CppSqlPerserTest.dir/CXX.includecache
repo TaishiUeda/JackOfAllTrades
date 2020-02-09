@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/main.cpp
+stdio.h
+-
+stdlib.h
+-
+sqlite3.h
+-
+

@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/src/build",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++     -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk   -std=gnu++11 -o CMakeFiles/CppSqlParser.dir/CppSqlParser.cpp.o -c /Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/src/CppSqlParser.cpp",
+  "file": "/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/src/CppSqlParser.cpp"
+}
+]
