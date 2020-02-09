@@ -387,7 +387,10 @@ namespace csp{
      * \param[out] err_msg Error message. In case of fething successfully, this becomes empty.
      * \retval list of columns selected by queries.
      */
-    ColumnList_t SqlFetch::fetchColumn(const ExecResult_t& res, std::string& err_msg) const{}
+    ColumnList_t SqlFetch::fetchColumn(const ExecResult_t& res, std::string& err_msg) const{
+	ColumnList_t col;
+	return col;
+    }
 
     // Get master table.
     /*
@@ -395,7 +398,10 @@ namespace csp{
      * \retval Table information. This is usefull to create colmuns
      *     corresponded to tables in database.
      */
-    TableInfo_t SqlFetch::getMaster(std::string& err_msg){}
+    TableInfo_t SqlFetch::getMaster(std::string& err_msg){
+	TableInfo_t table_info;
+	return table_info;
+    }
 
     // Generate a query to create table from a column list.
     /* If the column_list doen't contain a data as primary key,
@@ -406,7 +412,10 @@ namespace csp{
      * \retval Query message to create table.
      */
     std::string SqlFetch::genQueryCreate(const std::string& name,
-	    const ColumnList_t& column_list, std::string& err_msg){}
+	    const ColumnList_t& column_list, std::string& err_msg){
+	std::string ret;
+	return ret;
+    }
 
     // Generate queries to create table from a table info.
     /*
@@ -414,7 +423,10 @@ namespace csp{
      * \param[out] err_msg Error message.
      * \retval Query message to create table.
      */
-    std::string SqlFetch::genQueryCreate(const TableInfo_t& table_info, std::string& err_msg){}
+    std::string SqlFetch::genQueryCreate(const TableInfo_t& table_info, std::string& err_msg){
+	std::string ret;
+	return ret;
+    }
 
     // Generate a query to insert a column.
     /*
@@ -424,7 +436,10 @@ namespace csp{
      * \retval Query message to insert the column into the table.
      */
     std::string SqlFetch::genQueryInsert(const std::string& table_name,
-	    const Column_t& col, std::string& err_msg){}
+	    const Column_t& col, std::string& err_msg){
+	std::string ret;
+	return ret;
+    }
 
     // Generate a query to update a column.
     /* This is used to update a column which does not contain primary key,
@@ -436,7 +451,10 @@ namespace csp{
      * \retval Query message to insert the column into the table.
      */
     std::string SqlFetch::genQueryUpdate(const std::string table_name,
-	    const Column_t& col, const int64_t& key, std::string& err_msg){}
+	    const Column_t& col, const int64_t& key, std::string& err_msg){
+	std::string ret;
+	return ret;
+    }
 
     // Generate a query to update a column.
     /* This is used to update a column which contains primary key.
@@ -446,5 +464,8 @@ namespace csp{
      * \retval Query message to insert the column into the table.
      */
     std::string SqlFetch::genQueryUpdate(const std::string& table_name,
-	    const Column_t& col, std::string& err_msg){}
+	    const Column_t& col, std::string& err_msg){
+	std::string ret;
+	return ret;
+    }
 }
