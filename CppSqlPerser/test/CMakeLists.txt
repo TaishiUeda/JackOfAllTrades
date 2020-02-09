@@ -18,7 +18,12 @@ endif()
 # For executable
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 add_executable(${PROJECT_NAME}
-  main.cpp
+    ../src/CppSqlParser.cpp
+    main.cpp
+)
+target_include_directories(${PROJECT_NAME}
+PRIVATE ../src
+PRIVATE ./
 )
 target_link_libraries(${PROJECT_NAME}
     sqlite3

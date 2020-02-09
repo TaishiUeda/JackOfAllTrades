@@ -1,7 +1,12 @@
 [
 {
   "directory": "/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/build",
-  "command": "/Library/Developer/CommandLineTools/usr/bin/c++     -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk   -std=gnu++11 -o CMakeFiles/CppSqlPerserTest.dir/main.cpp.o -c /Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/main.cpp",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++   -I/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/../src -I/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/.   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk   -std=gnu++11 -o CMakeFiles/CppSqlPerserTest.dir/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/src/CppSqlParser.cpp.o -c /Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/src/CppSqlParser.cpp",
+  "file": "/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/src/CppSqlParser.cpp"
+},
+{
+  "directory": "/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/build",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++   -I/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/../src -I/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/.   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk   -std=gnu++11 -o CMakeFiles/CppSqlPerserTest.dir/main.cpp.o -c /Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/main.cpp",
   "file": "/Users/uedataishi/git/JackOfAllTrades/CppSqlPerser/test/main.cpp"
 }
 ]

@@ -14,11 +14,11 @@ namespace csp{
     //---------------------------------------------------------
     Data::Data(){}
     //---------------------------------------------------------
-    Data::Data(const bool& is_key)
-	:is_key_(is_key){}
+    Data::Data(const KeyFlag_t& flg)
+	:key_flg_(flg){}
     //---------------------------------------------------------
-    Data::Data(const Type_t& type, const bool& is_key)
-	:is_key_(is_key), type_(type){}
+    Data::Data(const Type_t& type, const KeyFlag_t& flg)
+	:key_flg_(flg), type_(type){}
 
     //---------------------------------------------------------
     template<>
@@ -119,8 +119,9 @@ namespace csp{
     template<>
     void Data::set(const int16_t& value){
 	this->data_.resize(2);
+	int16_t value_k = value;
 	for(size_t k=0u; k<2u; ++k){
-	    this->data_[k] = reinterpret_cast<int8_t*>(&value)[k];
+	    this->data_[k] = reinterpret_cast<int8_t*>(&value_k)[k];
 	}
 	this->type_ = INT16;
     }
@@ -128,8 +129,9 @@ namespace csp{
     template<>
     void Data::set(const int32_t& value){
 	this->data_.resize(4);
+	int32_t value_k = value;
 	for(size_t k=0u; k<4u; ++k){
-	    this->data_[k] = reinterpret_cast<int8_t*>(&value)[k];
+	    this->data_[k] = reinterpret_cast<int8_t*>(&value_k)[k];
 	}
 	this->type_ = INT32;
     }
@@ -137,8 +139,9 @@ namespace csp{
     template<>
     void Data::set(const int64_t& value){
 	this->data_.resize(8u);
+	int64_t value_k = value;
 	for(size_t k=0u; k<8u; ++k){
-	    this->data_[k] = reinterpret_cast<int8_t*>(&value)[k];
+	    this->data_[k] = reinterpret_cast<int8_t*>(&value_k)[k];
 	}
 	this->type_ = INT64;
     }
@@ -146,8 +149,9 @@ namespace csp{
     template<>
     void Data::set(const double& value){
 	this->data_.resize(8u);
+	double value_k = value;
 	for(size_t k=0u; k<8u; ++k){
-	    this->data_[k] = reinterpret_cast<int8_t*>(&value)[k];
+	    this->data_[k] = reinterpret_cast<int8_t*>(&value_k)[k];
 	}
 	this->type_ = REAL;
     }
@@ -302,12 +306,145 @@ namespace csp{
 	return ret;
     }
 
-    //############################################################
-    //
-    std::string create(const Table_t& obj, std::string& err_msg){}
-    std::string update(const Column_t& col, const int64_t& key, std::string& err_msg){}
-    std::string update(const Column_t& col, std::string& err_msg){}
-    std::string insert(const Column_t& col, std::string& err_msg){}
-    ErrList_t exec(const std::string& query){}
-    Table_t select(const std::string& query){}
+    //########################################################################
+    // SqlFetch
+    // Constructor
+    SqlFetch::SqlFetch(){}
+
+    //-------------------------------------------------------------------
+    // Constructor. Open database.
+    SqlFetch::SqlFetch(const std::string& db_name){
+       int32_t retval = sqlite3_open(db_name.c_str(), &db_ptr_);
+       if(retval != SQLITE_OK){
+	   last_err_ = sqlite3_errstr(retval);
+       }
+       else{
+	   is_opened_ = true;
+	   last_table_info_ = getMaster(last_err_);
+       }
+    } 
+
+    //-------------------------------------------------------------------
+    // Open database.
+    int32_t SqlFetch::open(const std::string& db_name, std::string& err_msg,
+	    const int32_t& flags, const char* zVfs){
+       int32_t retval 
+	   = sqlite3_open_v2(db_name.c_str(), &db_ptr_, flags, zVfs);
+       if(retval != SQLITE_OK){
+	   this->last_err_ = sqlite3_errstr(retval);
+       }
+       else{
+	   this->is_opened_ = true;
+	   last_table_info_ = getMaster(last_err_);
+       }
+       return retval;
+    }
+
+    static int execCallback(void *result_ptr, int argc, char **argv, char **col_name){
+	ResultElement_t a_res;
+        for(int k=0; k<argc; ++k){
+	    a_res[col_name[k]] = argv[k];
+	}
+	reinterpret_cast<ExecResult_t*>(result_ptr)->result.push_back(a_res);
+	return 0;
+    }
+
+    //-------------------------------------------------------------------
+    // Execute SQLite query
+    ExecResult_t SqlFetch::exec(const std::string& query, std::string& err_msg){
+	char *err_char = 0;
+	last_exec_result_.in_sql = query;
+	last_exec_result_.result.clear();
+        int32_t ret = sqlite3_exec(db_ptr_, query.c_str(), 
+		execCallback, &last_exec_result_, &err_char);
+	if(ret != SQLITE_OK){
+	    err_msg = err_char;
+	    sqlite3_free(err_char);
+	}
+	return last_exec_result_;
+    }
+
+    //-------------------------------------------------------------------
+    // Dump result of exec function into string.
+    std::string SqlFetch::dump(const ExecResult_t& res) const{
+	std::string ret = "Input query: " + res.in_sql + "\n";
+	auto i_res = res.result.begin();
+	auto i_res_end = res.result.end();
+	ret += "Result:\n";
+	for(;i_res != i_res_end; ++i_res){
+	    auto i_elem = i_res->begin();
+	    auto i_elem_end = i_res->end();
+	    for(;i_elem != i_elem_end; ++i_elem){
+		ret += i_elem->first + ": " + i_elem->second + "\n";
+	    }
+	}
+	return ret;
+    }
+
+    // Fetch column list from result of executed query for SELECT.
+    /*
+     * \param[in] res Result output by exec function with SELECT queries.
+     * \param[out] err_msg Error message. In case of fething successfully, this becomes empty.
+     * \retval list of columns selected by queries.
+     */
+    ColumnList_t SqlFetch::fetchColumn(const ExecResult_t& res, std::string& err_msg) const{}
+
+    // Get master table.
+    /*
+     * \param[out] err_list List of errors
+     * \retval Table information. This is usefull to create colmuns
+     *     corresponded to tables in database.
+     */
+    TableInfo_t SqlFetch::getMaster(std::string& err_msg){}
+
+    // Generate a query to create table from a column list.
+    /* If the column_list doen't contain a data as primary key,
+     *  a row with primary key is automatically created.
+     * \param[in] name name of table to be created.
+     * \param[in] column_list list of columns to be saved in table.
+     * \param[out] err_msg Error message.
+     * \retval Query message to create table.
+     */
+    std::string SqlFetch::genQueryCreate(const std::string& name,
+	    const ColumnList_t& column_list, std::string& err_msg){}
+
+    // Generate queries to create table from a table info.
+    /*
+     * \param[in] table_info Table information containing definition of tables.
+     * \param[out] err_msg Error message.
+     * \retval Query message to create table.
+     */
+    std::string SqlFetch::genQueryCreate(const TableInfo_t& table_info, std::string& err_msg){}
+
+    // Generate a query to insert a column.
+    /*
+     * \param[in] name name of a table to be inserted a column into.
+     * \param[in] col A column to be inserted into the table.
+     * \param[out] err_msg Error message.
+     * \retval Query message to insert the column into the table.
+     */
+    std::string SqlFetch::genQueryInsert(const std::string& table_name,
+	    const Column_t& col, std::string& err_msg){}
+
+    // Generate a query to update a column.
+    /* This is used to update a column which does not contain primary key,
+     *  and the user have to point at the target column by input primary hey.
+     * \param[in] name name of a table to be updated.
+     * \param[in] col An updated column.
+     * \param[in] key Primary key of the column.
+     * \param[out] err_msg Error message.
+     * \retval Query message to insert the column into the table.
+     */
+    std::string SqlFetch::genQueryUpdate(const std::string table_name,
+	    const Column_t& col, const int64_t& key, std::string& err_msg){}
+
+    // Generate a query to update a column.
+    /* This is used to update a column which contains primary key.
+     * \param[in] name name of a table to be updated.
+     * \param[in] col An updated column.
+     * \param[out] err_msg Error message.
+     * \retval Query message to insert the column into the table.
+     */
+    std::string SqlFetch::genQueryUpdate(const std::string& table_name,
+	    const Column_t& col, std::string& err_msg){}
 }
