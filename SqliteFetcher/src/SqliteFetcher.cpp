@@ -412,7 +412,6 @@ namespace sf{
 	std::string ret;
 	for(auto i_res =res_list.begin(); i_res != i_res_end; ++i_res){
 	    ret += dump(*i_res);
-
 	}
 	return ret;
     }

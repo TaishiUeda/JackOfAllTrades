@@ -245,6 +245,7 @@ namespace sf{
 	     * \retval list of columns selected by queries.
 	     */
 	    Column_t fetchColumn(const ExecResult_t& res, const size_t& n, std::string& err_msg) const;
+	    
 	    //! Get master table.
 	    /*!
 	     * \param[out] err_msg error message
@@ -252,6 +253,15 @@ namespace sf{
 	     *     corresponded to tables in database.
 	     */
 	    TableInfo_t getMaster(std::string& err_msg);
+	    
+	    //! Get master table.
+	    /*!
+	     * \param[out] table_name name of target table
+	     * \param[out] err_msg error message
+	     * \retval Table information. This is usefull to create colmuns
+	     *     corresponded to tables in database.
+	     */
+	    Column_t getMaster(const std::string table_name, std::string& err_msg);
 
 	    //! Generate a query to create table from a column list.
 	    /*! If the column_list doen't contain a data as primary key,
@@ -311,6 +321,9 @@ namespace sf{
 
 	    bool is_opened_{false};
 	    sqlite3* db_ptr_{nullptr};
+
+
+	    
     };
     
 }
