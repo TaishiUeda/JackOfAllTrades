@@ -5,9 +5,9 @@
  * Distributed under terms of the MIT license.
  */
 
-#include "CppSqlParser.hpp"
+#include "SqliteFetcher.hpp"
 
-namespace csp{
+namespace sf{
 
     //##############################################################
     // Data
@@ -307,13 +307,13 @@ namespace csp{
     }
 
     //########################################################################
-    // SqlFetch
+    // Fetcher
     // Constructor
-    SqlFetch::SqlFetch(){}
+    Fetcher::Fetcher(){}
 
     //-------------------------------------------------------------------
     // Constructor. Open database.
-    SqlFetch::SqlFetch(const std::string& db_name){
+    Fetcher::Fetcher(const std::string& db_name){
        int32_t retval = sqlite3_open(db_name.c_str(), &db_ptr_);
        if(retval != SQLITE_OK){
 	   last_err_ = sqlite3_errstr(retval);
@@ -326,7 +326,7 @@ namespace csp{
 
     //-------------------------------------------------------------------
     // Open database.
-    int32_t SqlFetch::open(const std::string& db_name, std::string& err_msg,
+    int32_t Fetcher::open(const std::string& db_name, std::string& err_msg,
 	    const int32_t& flags, const char* zVfs){
        int32_t retval 
 	   = sqlite3_open_v2(db_name.c_str(), &db_ptr_, flags, zVfs);
@@ -351,7 +351,7 @@ namespace csp{
 
     //-------------------------------------------------------------------
     // Execute SQLite query
-    ExecResult_t SqlFetch::exec(const std::string& query, std::string& err_msg){
+    ExecResult_t Fetcher::exec(const std::string& query, std::string& err_msg){
 	char *err_char = 0;
 	last_exec_result_.in_sql = query;
 	last_exec_result_.result.clear();
@@ -365,8 +365,32 @@ namespace csp{
     }
 
     //-------------------------------------------------------------------
+    // Execute SQLite query
+    std::list<ExecResult_t> Fetcher::execSeparate(const std::string& query, std::string& err_msg){
+	std::list<ExecResult_t> ret_list;
+	size_t i_begin = 0u;
+	size_t i_dlm = 0u;
+	while(i_begin < query.size()){
+	    i_dlm = query.find(";",i_begin);
+	    if(i_dlm == std::string::npos){
+		i_dlm=query.size()-1u;
+	    }
+	    auto a_query = query.substr(i_begin,i_dlm-i_begin);
+	    auto a_res = exec(a_query, err_msg);
+	    if(!err_msg.empty()){
+		break;
+	    }
+	    else{
+		ret_list.push_back(a_res);
+	    }
+	    i_begin = i_dlm+1u;
+	}
+	return ret_list;
+    }
+
+    //-------------------------------------------------------------------
     // Dump result of exec function into string.
-    std::string SqlFetch::dump(const ExecResult_t& res) const{
+    std::string Fetcher::dump(const ExecResult_t& res) const{
 	std::string ret = "Input query: " + res.in_sql + "\n";
 	auto i_res = res.result.begin();
 	auto i_res_end = res.result.end();
@@ -381,13 +405,21 @@ namespace csp{
 	return ret;
     }
 
+    //-------------------------------------------------------------------
+    //! Dump result of exec function into string.
+    std::string Fetcher::dump(const std::list<ExecResult_t>& res_list) const{
+	auto i_res_end = res_list.end();
+	std::string ret;
+	for(auto i_res =res_list.begin(); i_res != i_res_end; ++i_res){
+	    ret += dump(*i_res);
+
+	}
+	return ret;
+    }
+
+    //-------------------------------------------------------------------
     // Fetch column list from result of executed query for SELECT.
-    /*
-     * \param[in] res Result output by exec function with SELECT queries.
-     * \param[out] err_msg Error message. In case of fething successfully, this becomes empty.
-     * \retval list of columns selected by queries.
-     */
-    ColumnList_t SqlFetch::fetchColumn(const ExecResult_t& res, std::string& err_msg) const{
+    ColumnList_t Fetcher::fetchColumn(const ExecResult_t& res, std::string& err_msg) const{
 	ColumnList_t col;
 	return col;
     }
@@ -398,8 +430,17 @@ namespace csp{
      * \retval Table information. This is usefull to create colmuns
      *     corresponded to tables in database.
      */
-    TableInfo_t SqlFetch::getMaster(std::string& err_msg){
+    TableInfo_t Fetcher::getMaster(std::string& err_msg){
+	ExecResult_t res = exec("SELECT * FROM sqlite_master;",err_msg);
 	TableInfo_t table_info;
+	if(!err_msg.empty()){
+	    return table_info;
+	}
+	auto i_res_end = res.result.end();
+	for(auto i_res = res.result.begin(); i_res != i_res_end; ++i_res){
+	    //TODO parse sql to TableInfo
+	    (*i_res)["sql"];
+	}
 	return table_info;
     }
 
@@ -411,7 +452,7 @@ namespace csp{
      * \param[out] err_msg Error message.
      * \retval Query message to create table.
      */
-    std::string SqlFetch::genQueryCreate(const std::string& name,
+    std::string Fetcher::genQueryCreate(const std::string& name,
 	    const ColumnList_t& column_list, std::string& err_msg){
 	std::string ret;
 	return ret;
@@ -423,7 +464,7 @@ namespace csp{
      * \param[out] err_msg Error message.
      * \retval Query message to create table.
      */
-    std::string SqlFetch::genQueryCreate(const TableInfo_t& table_info, std::string& err_msg){
+    std::string Fetcher::genQueryCreate(const TableInfo_t& table_info, std::string& err_msg){
 	std::string ret;
 	return ret;
     }
@@ -435,7 +476,7 @@ namespace csp{
      * \param[out] err_msg Error message.
      * \retval Query message to insert the column into the table.
      */
-    std::string SqlFetch::genQueryInsert(const std::string& table_name,
+    std::string Fetcher::genQueryInsert(const std::string& table_name,
 	    const Column_t& col, std::string& err_msg){
 	std::string ret;
 	return ret;
@@ -450,7 +491,7 @@ namespace csp{
      * \param[out] err_msg Error message.
      * \retval Query message to insert the column into the table.
      */
-    std::string SqlFetch::genQueryUpdate(const std::string table_name,
+    std::string Fetcher::genQueryUpdate(const std::string table_name,
 	    const Column_t& col, const int64_t& key, std::string& err_msg){
 	std::string ret;
 	return ret;
@@ -463,7 +504,7 @@ namespace csp{
      * \param[out] err_msg Error message.
      * \retval Query message to insert the column into the table.
      */
-    std::string SqlFetch::genQueryUpdate(const std::string& table_name,
+    std::string Fetcher::genQueryUpdate(const std::string& table_name,
 	    const Column_t& col, std::string& err_msg){
 	std::string ret;
 	return ret;

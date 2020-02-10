@@ -6,7 +6,7 @@
 #include <list>
 #include <map>
 
-namespace csp{
+namespace sf{
 
     //! Types of data
     enum Type_t{
@@ -160,7 +160,7 @@ namespace csp{
      * db_1["Table_2"] = column_list_2;
      * ```
      */
-    using TableInfo_t  = std::map<std::string, ColumnList_t>;
+    using TableInfo_t  = std::map<std::string, Column_t>;
     using ResultElement_t = std::map<std::string,std::string>;
     using Result_t = std::vector<ResultElement_t>;
     struct ExecResult_t{
@@ -168,10 +168,10 @@ namespace csp{
 	Result_t result;
     };
 
-    class SqlFetch{
+    class Fetcher{
 	public:
 
-	    SqlFetch();
+	    Fetcher();
 
 	    //! Constructor. Open database.
 	    /*!
@@ -180,7 +180,7 @@ namespace csp{
 	     * and is created if it does not already exist.
 	     * \param[in] db_name name of a database to be opened.
 	     */
-	    SqlFetch(const std::string& db_name); 
+	    Fetcher(const std::string& db_name); 
 
 	    //! Open database.
 	    /*!
@@ -208,12 +208,27 @@ namespace csp{
 	     */
 	    ExecResult_t exec(const std::string& query, std::string& err_msg);
 
+	    //! Execute SQLite query
+	    /*!
+	     * \param[in] query SQLite query to be executed
+	     * \param[out] err_msg error message
+	     * \retval result of the input query.
+	     */
+	    std::list<ExecResult_t> execSeparate(const std::string& query, std::string& err_msg);
+
 	    //! Dump result of exec function into string.
 	    /*!
 	     * \param[in] res Result of exec function.
 	     * \retval string formed result.
 	     */
 	    std::string dump(const ExecResult_t& res) const;
+	    
+	    //! Dump result of exec function into string.
+	    /*!
+	     * \param[in] res Result of exec function.
+	     * \retval string formed result.
+	     */
+	    std::string dump(const std::list<ExecResult_t>& res_list) const;
 
 	    //! Fetch column list from result of executed query for SELECT.
 	    /*!
@@ -223,6 +238,13 @@ namespace csp{
 	     */
 	    ColumnList_t fetchColumn(const ExecResult_t& res, std::string& err_msg) const;
 
+	    //! Fetch column list from result of executed query for SELECT.
+	    /*!
+	     * \param[in] res Result output by exec function with SELECT queries.
+	     * \param[out] err_msg Error message. In case of fething successfully, this becomes empty.
+	     * \retval list of columns selected by queries.
+	     */
+	    Column_t fetchColumn(const ExecResult_t& res, const size_t& n, std::string& err_msg) const;
 	    //! Get master table.
 	    /*!
 	     * \param[out] err_msg error message
