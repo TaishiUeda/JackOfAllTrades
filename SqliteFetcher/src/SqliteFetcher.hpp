@@ -15,7 +15,10 @@ namespace sf{
 	INT16,
 	INT32,
 	INT64,
-	REAL,
+	UINT64,
+	FLOAT,
+	DOUBLE,
+	BOOL,
 	TEXT,
 	BLOB
     };
@@ -24,8 +27,72 @@ namespace sf{
 
     using KeyFlag_t = uint8_t;
     const KeyFlag_t NORMAL = 0u;
-    const KeyFlag_t PRIMARY_KEY = 1u;
-    const KeyFlag_t AUTO_INCREMENT = 2u;
+    const KeyFlag_t PRIMARY_KEY = 0b00000001;
+    const KeyFlag_t AUTO_INCREMENT = 0b00000010;
+    const KeyFlag_t NOT_NULL = 0b00000100;
+    
+    namespace sql_types{
+	using TypeStr_t = std::string;
+	const TypeStr_t INT = "INT";
+	const TypeStr_t INTEGER = "INTEGER";
+	const TypeStr_t TYNYINT = "TYNYINT";
+	const TypeStr_t SMALLINT = "SMALLINT";
+	const TypeStr_t MEDIUMINT = "MEDIUMINT";
+	const TypeStr_t BIGINT = "BIGINT";
+	const TypeStr_t UINT64 = "UINT64";
+	const TypeStr_t INT2 = "INT2";
+	const TypeStr_t INT4 = "INT4";
+	const TypeStr_t INT8 = "INT8";
+	const TypeStr_t CHAR= "CHAR";
+	const TypeStr_t CHARACTER = "CHARACTER";
+	const TypeStr_t VARCHAR = "VARCHAR";
+	const TypeStr_t VARYING_CHARACTER = "VARYING CHARACTER";
+	const TypeStr_t NCHAR = "NCHAR";
+	const TypeStr_t TEXT = "TEXT";
+	const TypeStr_t CLOB = "CLOB";
+	const TypeStr_t BLOB = "BLOB";
+	const TypeStr_t REAL = "REAL";
+	const TypeStr_t DOUBLE = "DOUBLE";
+	const TypeStr_t DOUBLE_PRECISION = "DOUBLE PRECISION";
+	const TypeStr_t FLOAT = "FLOAT";
+	const TypeStr_t NUMERIC = "NUMERIC";
+	const TypeStr_t DECIMAL = "DECIMAL";
+	const TypeStr_t BOOLEAN = "BOOLEAN";
+	const TypeStr_t DATE = "DATE";
+	const TypeStr_t DATETIME = "DATETIME";
+    }
+
+    const std::map<sql_types::TypeStr_t, Type_t> TypeDef{
+	{sql_types::INT, INT32},
+	    {sql_types::INTEGER, INT32},
+	    {sql_types::TYNYINT, INT8},
+	    {sql_types::SMALLINT, INT16},
+	    {sql_types::MEDIUMINT, INT32},
+	    {sql_types::BIGINT, INT64},
+	    {sql_types::UINT64, UINT64},
+	    {sql_types::INT2, INT16},
+	    {sql_types::INT4, INT32},
+	    {sql_types::INT8, INT64},
+            {sql_types::CHAR, TEXT},
+            {sql_types::CHARACTER, TEXT},
+	    {sql_types::VARCHAR, TEXT},
+	    {sql_types::VARYING_CHARACTER, TEXT},
+	    {sql_types::NCHAR, TEXT},
+	    {sql_types::TEXT, TEXT},
+	    {sql_types::CLOB, TEXT},
+	    {sql_types::BLOB, BLOB},
+	    {sql_types::REAL, DOUBLE},
+	    {sql_types::DOUBLE, DOUBLE},
+	    {sql_types::DOUBLE_PRECISION, DOUBLE},
+	    {sql_types::FLOAT, FLOAT},
+	    {sql_types::NUMERIC, INT64},
+	    {sql_types::DECIMAL, DOUBLE},
+	    {sql_types::BOOLEAN, BOOL},
+	    {sql_types::DATE, INT64},
+	    {sql_types::DATETIME, INT64}
+    };
+	
+
     //! Data container class
     class Data{
 	public:
@@ -34,25 +101,35 @@ namespace sf{
 	     * \param[in] is_key If true, this data is to be used as key.
 	     *    Only integer type data can be key.
 	     */
-	    explicit Data(const KeyFlag_t& flg=NORMAL);
+	    explicit Data(const KeyFlag_t& flg);
 	    /*! Set the data type in initializing.
 	     * \param[in] type Type of data
 	     * \param[in] is_key If true, this data is to be used as key.
 	     *    Only integer type data can be key.
 	     */
-	    Data(const Type_t& type, const KeyFlag_t& flg=NORMAL);
+	    Data(sql_types::TypeStr_t type, const KeyFlag_t& flg=NORMAL);
+	    /*! Set the data type in initializing.
+	     * \param[in] type Type of data
+	     * \param[in] is_key If true, this data is to be used as key.
+	     *    Only integer type data can be key.
+	     */
+	    Data(const std::string& dflt_str, sql_types::TypeStr_t type, 
+		    const KeyFlag_t& flg=NORMAL);
 	    /*! Set the data type in initializing.
 	     * \param[in] type Type of data
 	     * \param[in] is_key If true, this data is to be used as key.
 	     *    Only integer type data can be key.
 	     */
 	    template<typename T_VALUE>
-		inline Data(const T_VALUE& value, const KeyFlag_t& flg=NORMAL):key_flg_(flg){
-		    this->set(value);
+		inline Data(const T_VALUE& dflt_value, const KeyFlag_t& flg=NORMAL):
+		    key_flg_(flg){
+		    this->set(dflt_value);
 		}
 
 	    /*! Put value as a string. This is convenient when create query. */
 	    std::string str();
+
+	    const sql_types::TypeStr_t& type() const;
 
 	    /*! Get value.
 	     * \param[out] value output value.
@@ -60,12 +137,14 @@ namespace sf{
 	     * \retval false type of value and that of Data are different.
 	     */
 	    template<typename T_OUT>
-		bool get(T_OUT& value);
+		bool get(T_OUT& value) const;
 	    /*! Set value
 	     * \param[in] value to set.
 	     */
 	    template<typename T_IN>
-		void set(const T_IN& value);
+		void set(T_IN value);
+
+	    void set(const Type_t& type, const std::string& value);
 	    /*! Change value. If a value of different type from Data, it returns false.
 	     * \param[in] value to set.
 	     * \retval true success
@@ -74,9 +153,14 @@ namespace sf{
 	    template<typename T_IN>
 		bool change(const T_IN& value);
 	private:
+	    void setType(sql_types::TypeStr_t type);
+	    bool get(void* value_ptr, const Type_t& type) const;
+	    void set(void* value_ptr, const Type_t& type, const uint32_t& size);
+	    bool change(void* value_ptr, const Type_t& type, const uint32_t& size);
 	    KeyFlag_t key_flg_{NORMAL};
 	    bool is_auto_{false};
 	    Binary_t data_;
+	    sql_types::TypeStr_t type_str_;    
 	    Type_t type_{NONE};
     };
 
@@ -244,7 +328,7 @@ namespace sf{
 	     * \param[out] err_msg Error message. In case of fething successfully, this becomes empty.
 	     * \retval list of columns selected by queries.
 	     */
-	    Column_t fetchColumn(const ExecResult_t& res, const size_t& n, std::string& err_msg) const;
+	    Column_t fetchColumn(const ExecResult_t& res, const size_t& id, std::string& err_msg) const;
 	    
 	    //! Get master table.
 	    /*!
@@ -252,7 +336,7 @@ namespace sf{
 	     * \retval Table information. This is usefull to create colmuns
 	     *     corresponded to tables in database.
 	     */
-	    TableInfo_t getMaster(std::string& err_msg);
+	    TableInfo_t getTableInfo(std::string& err_msg);
 	    
 	    //! Get master table.
 	    /*!
@@ -261,7 +345,7 @@ namespace sf{
 	     * \retval Table information. This is usefull to create colmuns
 	     *     corresponded to tables in database.
 	     */
-	    Column_t getMaster(const std::string table_name, std::string& err_msg);
+	    Column_t getTableInfo(const std::string table_name, std::string& err_msg);
 
 	    //! Generate a query to create table from a column list.
 	    /*! If the column_list doen't contain a data as primary key,

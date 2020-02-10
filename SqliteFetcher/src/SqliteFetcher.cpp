@@ -13,30 +13,52 @@ namespace sf{
     // Data
     //---------------------------------------------------------
     Data::Data(){}
+    
     //---------------------------------------------------------
     Data::Data(const KeyFlag_t& flg)
 	:key_flg_(flg){}
-    //---------------------------------------------------------
-    Data::Data(const Type_t& type, const KeyFlag_t& flg)
-	:key_flg_(flg), type_(type){}
 
     //---------------------------------------------------------
-    template<>
-    bool Data::get(int8_t& value){
-	if(this->type_ == INT8){
-	    value = data_[0];
-	    return true;
+    Data::Data(sql_types::TypeStr_t type, const KeyFlag_t& flg)
+	:key_flg_(flg), type_str_(type){
+	    setType(type);
+    }
+
+    //---------------------------------------------------------
+    Data::Data(const std::string& dflt_str, sql_types::TypeStr_t type, 
+		    const KeyFlag_t& flg)
+	:key_flg_(flg), type_str_(type){
+
+	    setType(type);
+	    set(type_, dflt_str);
+	}
+
+    //---------------------------------------------------------
+    void Data::setType(sql_types::TypeStr_t type){
+	//typeから括弧部分を消去する
+	size_t cpos = type.find('(');
+	if(cpos != std::string::npos){
+	    type = type.substr(0u,cpos);
+	}
+
+	if(TypeDef.find(type) != TypeDef.end()){
+	    type_ = TypeDef.at(type);
 	}
 	else{
-	    return false;
+	    type_ = BLOB;
 	}
     }
+
     //---------------------------------------------------------
-    template<>
-    bool Data::get(int16_t& value){
-	if(this->type_ == INT16){
+    const sql_types::TypeStr_t& Data::type() const{
+	return type_str_;
+    }
+
+    //---------------------------------------------------------
+    bool Data::get(void* value_ptr, const Type_t& type) const{
+	if(type_ == type){
 	    for(size_t k=0u; k<data_.size(); ++k){
-		reinterpret_cast<int8_t*>(&value)[k] = data_[k];
+		reinterpret_cast<int8_t*>(value_ptr)[k] = data_[k];
 	    }
 	    return true;
 	}
@@ -44,48 +66,66 @@ namespace sf{
 	    return false;
 	}
     }
+
     //---------------------------------------------------------
-    template<>
-    bool Data::get(int32_t& value){
-	if(this->type_ == INT32){
-	    for(size_t k=0u; k<data_.size(); ++k){
-		reinterpret_cast<int8_t*>(&value)[k] = data_[k];
-	    }
+    void Data::set(void* value_ptr, const Type_t& type, const uint32_t& size){
+	this->data_.resize(size);
+	for(size_t k=0u; k<8u; ++k){
+	    this->data_[k] = reinterpret_cast<int8_t*>(value_ptr)[k];
+	}
+	this->type_ = type;
+	
+    }
+
+    //---------------------------------------------------------
+    bool Data::change(void* value_ptr, const Type_t& type, const uint32_t& size){
+	if(this->type_ == type){
+	    this->set(value_ptr, type, size);
 	    return true;
 	}
 	else{
 	    return false;
 	}
+
     }
     //---------------------------------------------------------
     template<>
-    bool Data::get(int64_t& value){
-	if(this->type_ == INT64){
-	    for(size_t k=0u; k<data_.size(); ++k){
-		reinterpret_cast<int8_t*>(&value)[k] = data_[k];
-	    }
-	    return true;
-	}
-	else{
-	    return false;
-	}
+    bool Data::get(int8_t& value) const{
+	return get(&value, INT8);
     }
     //---------------------------------------------------------
     template<>
-    bool Data::get(double& value){
-	if(this->type_ == REAL){
-	    for(size_t k=0u; k<data_.size(); ++k){
-		reinterpret_cast<int8_t*>(&value)[k] = data_[k];
-	    }
-	    return true;
-	}
-	else{
-	    return false;
-	}
+    bool Data::get(int16_t& value) const{
+	return get(&value, INT16);
     }
     //---------------------------------------------------------
     template<>
-    bool Data::get(std::string& value){
+    bool Data::get(int32_t& value) const{
+	return get(&value, INT32);
+    }
+    //---------------------------------------------------------
+    template<>
+    bool Data::get(int64_t& value) const{
+	return get(&value, INT64);
+    }
+    //---------------------------------------------------------
+    template<>
+    bool Data::get(uint64_t& value) const{
+	return get(&value, UINT64);
+    }
+    //---------------------------------------------------------
+    template<>
+    bool Data::get(float& value) const{
+	return get(&value, FLOAT);
+    }
+    //---------------------------------------------------------
+    template<>
+    bool Data::get(double& value) const{
+	return get(&value, DOUBLE);
+    }
+    //---------------------------------------------------------
+    template<>
+    bool Data::get(std::string& value) const{
 	if(this->type_ == TEXT){
 	    for(size_t k=0u; k<this->data_.size(); ++k){
 		value[k] = static_cast<char>(this->data_[k]);
@@ -98,7 +138,20 @@ namespace sf{
     }
     //---------------------------------------------------------
     template<>
-    bool Data::get(Binary_t& value){
+    bool Data::get(bool& value) const{
+	if(this->type_ == BOOL){
+	    for(size_t k=0u; k<data_.size(); ++k){
+		reinterpret_cast<int8_t*>(&value)[k] = data_[k];
+	    }
+	    return true;
+	}
+	else{
+	    return false;
+	}
+    }
+    //---------------------------------------------------------
+    template<>
+    bool Data::get(Binary_t& value) const{
 	if(this->type_ == BLOB){
 	    value = this->data_;
 	    return true;
@@ -110,54 +163,47 @@ namespace sf{
 
     //---------------------------------------------------------
     template<>
-    void Data::set(const int8_t& value){
-	this->data_.resize(1);
-	this->data_[0] = value;
-	this->type_ = INT8;
+    void Data::set(int8_t value){
+	set(&value, INT8, sizeof(value));
     }
     //---------------------------------------------------------
     template<>
-    void Data::set(const int16_t& value){
-	this->data_.resize(2);
-	int16_t value_k = value;
-	for(size_t k=0u; k<2u; ++k){
-	    this->data_[k] = reinterpret_cast<int8_t*>(&value_k)[k];
-	}
-	this->type_ = INT16;
+    void Data::set(int16_t value){
+	set(&value, INT16, sizeof(value));
     }
     //---------------------------------------------------------
     template<>
-    void Data::set(const int32_t& value){
-	this->data_.resize(4);
-	int32_t value_k = value;
-	for(size_t k=0u; k<4u; ++k){
-	    this->data_[k] = reinterpret_cast<int8_t*>(&value_k)[k];
-	}
-	this->type_ = INT32;
+    void Data::set(int32_t value){
+	set(&value, INT32, sizeof(value));
     }
     //---------------------------------------------------------
     template<>
-    void Data::set(const int64_t& value){
-	this->data_.resize(8u);
-	int64_t value_k = value;
-	for(size_t k=0u; k<8u; ++k){
-	    this->data_[k] = reinterpret_cast<int8_t*>(&value_k)[k];
-	}
-	this->type_ = INT64;
+    void Data::set(int64_t value){
+	set(&value, INT64, sizeof(value));
     }
     //---------------------------------------------------------
     template<>
-    void Data::set(const double& value){
-	this->data_.resize(8u);
-	double value_k = value;
-	for(size_t k=0u; k<8u; ++k){
-	    this->data_[k] = reinterpret_cast<int8_t*>(&value_k)[k];
-	}
-	this->type_ = REAL;
+    void Data::set(uint64_t value){
+	set(&value, UINT64, sizeof(value));
     }
     //---------------------------------------------------------
     template<>
-    void Data::set(const std::string& value){
+    void Data::set(bool value){
+	set(&value, BOOL, sizeof(value));
+    }
+    //---------------------------------------------------------
+    template<>
+    void Data::set(float value){
+	set(&value, FLOAT, sizeof(value));
+    }
+    //---------------------------------------------------------
+    template<>
+    void Data::set(double value){
+	set(&value, DOUBLE, sizeof(value));
+    }
+    //---------------------------------------------------------
+    template<>
+    void Data::set(std::string value){
 	this->data_.clear();
 	for(size_t k=0u; k<value.size(); ++k){
 	    this->data_.push_back(static_cast<uint8_t>(value[k]));
@@ -166,7 +212,7 @@ namespace sf{
     }
     //---------------------------------------------------------
     template<>
-    void Data::set(const Binary_t& value){
+    void Data::set(Binary_t value){
 	this->data_ = value;
 	this->type_ = BLOB;
     }
@@ -216,8 +262,41 @@ namespace sf{
     }
     //---------------------------------------------------------
     template<>
+    bool Data::change(const uint64_t& value){
+	if(this->type_ == UINT64){
+	    this->set(value);
+	    return true;
+	}
+	else{
+	    return false;
+	}
+    }
+    //---------------------------------------------------------
+    template<>
+    bool Data::change(const float& value){
+	if(this->type_ == FLOAT){
+	    this->set(value);
+	    return true;
+	}
+	else{
+	    return false;
+	}
+    }
+    //---------------------------------------------------------
+    template<>
     bool Data::change(const double& value){
-	if(this->type_ == REAL){
+	if(this->type_ == DOUBLE){
+	    this->set(value);
+	    return true;
+	}
+	else{
+	    return false;
+	}
+    }
+    //---------------------------------------------------------
+    template<>
+    bool Data::change(const bool& value){
+	if(this->type_ == BOOL){
 	    this->set(value);
 	    return true;
 	}
@@ -248,12 +327,19 @@ namespace sf{
 	}
     }
 
+
     //---------------------------------------------------------
     std::string Data::str(){
 	std::string ret;
 	switch(type_){
 	    case NONE:{
 			  ret = "";
+			  break;
+		      }
+	    case BOOL:{
+			  bool value_bool = 0;
+			  this->get(value_bool);
+			  ret = std::to_string(value_bool);
 			  break;
 		      }
 	    case INT8:{
@@ -280,8 +366,20 @@ namespace sf{
 			   ret = std::to_string(value_int64);
 			   break;
 		       }
-	    case REAL:{
-			  double value_real = 0;
+	    case UINT64:{
+			   uint64_t value_uint64 = 0;
+			   this->get(value_uint64);
+			   ret = std::to_string(value_uint64);
+			   break;
+		       }
+	    case FLOAT:{
+			  float value_float = 0.0f;
+			  this->get(value_float);
+			  ret = std::to_string(value_float);
+			  break;
+		      }
+	    case DOUBLE:{
+			  double value_real = 0.0;
 			  this->get(value_real);
 			  ret = std::to_string(value_real);
 			  break;
@@ -306,6 +404,77 @@ namespace sf{
 	return ret;
     }
 
+    //---------------------------------------------------------
+    void Data::set(const Type_t& type, const std::string& dflt_str){
+	switch(type){
+	    case NONE:{
+			  break;
+		      }
+	    case BOOL:{
+			  bool value_bool 
+			      = static_cast<bool>(std::stoi(dflt_str));
+			  this->set(value_bool);
+			  break;
+		      }
+	    case INT8:{
+			  int8_t value_int8_t 
+			      = static_cast<int8_t>(std::stoi(dflt_str));
+			  this->set(value_int8_t);
+			  break;
+		      }
+	    case INT16:{
+			  int16_t value_int16_t 
+			      = static_cast<int16_t>(std::stoi(dflt_str));
+			  this->set(value_int16_t);
+			   break;
+		       }
+	    case INT32:{
+			  int32_t value_int32_t 
+			      = static_cast<int32_t>(std::stoi(dflt_str));
+			  this->set(value_int32_t);
+			   break;
+		       }
+	    case INT64:{
+			  int64_t value_int64_t 
+			      = static_cast<int64_t>(std::stoi(dflt_str));
+			  this->set(value_int64_t);
+			   break;
+		       }
+	    case UINT64:{
+			  uint64_t value_uint64_t 
+			      = static_cast<uint64_t>(std::stoi(dflt_str));
+			  this->set(value_uint64_t);
+			   break;
+		       }
+	    case FLOAT:{
+			  float value_float 
+			      = static_cast<float>(std::stof(dflt_str));
+			  this->set(value_float);
+			  break;
+		      }
+	    case DOUBLE:{
+			  double value_double 
+			      = static_cast<double>(std::stod(dflt_str));
+			  this->set(value_double);
+			  break;
+		      }
+	    case TEXT:{
+			  this->set(dflt_str);
+			  break;
+		      }
+	    case BLOB:{
+			  Binary_t value_blob;
+			  for(size_t k=0u; k<dflt_str.length(); ++k){
+			      value_blob.push_back(
+				      static_cast<int8_t>(dflt_str[k]));
+			  }
+			  this->set(value_blob);
+			  break;
+		      }
+	}
+    }
+
+
     //########################################################################
     // Fetcher
     // Constructor
@@ -320,7 +489,6 @@ namespace sf{
        }
        else{
 	   is_opened_ = true;
-	   last_table_info_ = getMaster(last_err_);
        }
     } 
 
@@ -335,15 +503,20 @@ namespace sf{
        }
        else{
 	   this->is_opened_ = true;
-	   last_table_info_ = getMaster(last_err_);
        }
        return retval;
     }
 
+    //-------------------------------------------------------------------
     static int execCallback(void *result_ptr, int argc, char **argv, char **col_name){
 	ResultElement_t a_res;
         for(int k=0; k<argc; ++k){
-	    a_res[col_name[k]] = argv[k];
+	    if(argv[k] == nullptr || argv[k][0] == '\0'){
+		a_res[col_name[k]] = "";
+	    }
+	    else{
+		a_res[col_name[k]] = argv[k];
+	    }
 	}
 	reinterpret_cast<ExecResult_t*>(result_ptr)->result.push_back(a_res);
 	return 0;
@@ -391,17 +564,32 @@ namespace sf{
     //-------------------------------------------------------------------
     // Dump result of exec function into string.
     std::string Fetcher::dump(const ExecResult_t& res) const{
-	std::string ret = "Input query: " + res.in_sql + "\n";
+	std::string ret = "{\"Input\":\"" + res.in_sql + "\",\n";
 	auto i_res = res.result.begin();
 	auto i_res_end = res.result.end();
-	ret += "Result:\n";
+	ret += "\"results\":[";
+	bool is_first1 = false;
 	for(;i_res != i_res_end; ++i_res){
+	    if(!is_first1){
+		ret += ",\n ";
+	    }else{
+		is_first1 = false;
+	    }
+	    ret += "{";
 	    auto i_elem = i_res->begin();
 	    auto i_elem_end = i_res->end();
+	    bool is_first = true;
 	    for(;i_elem != i_elem_end; ++i_elem){
-		ret += i_elem->first + ": " + i_elem->second + "\n";
+		if(!is_first){
+		    ret += ", ";
+		}else{
+		    is_first = false;
+		}
+		ret += "\"" + i_elem->first + "\":\"" + i_elem->second + "\"";
 	    }
+	    ret += "}";
 	}
+	ret += "]}";
 	return ret;
     }
 
@@ -429,7 +617,7 @@ namespace sf{
      * \retval Table information. This is usefull to create colmuns
      *     corresponded to tables in database.
      */
-    TableInfo_t Fetcher::getMaster(std::string& err_msg){
+    TableInfo_t Fetcher::getTableInfo(std::string& err_msg){
 	ExecResult_t res = exec("SELECT * FROM sqlite_master;",err_msg);
 	TableInfo_t table_info;
 	if(!err_msg.empty()){
@@ -437,8 +625,50 @@ namespace sf{
 	}
 	auto i_res_end = res.result.end();
 	for(auto i_res = res.result.begin(); i_res != i_res_end; ++i_res){
-	    //TODO parse sql to TableInfo
-	    (*i_res)["sql"];
+	    if(i_res->at("type") == "table"){
+		std::string tbl_name = i_res->at("name");
+		Column_t a_col = getTableInfo(tbl_name, err_msg);
+		if(!err_msg.empty()){
+		    break;
+		}
+		else{
+		    table_info[tbl_name] = a_col;
+		}
+	    }
+	}
+	return table_info;
+    }
+    
+    Column_t Fetcher::getTableInfo(const std::string table_name, std::string& err_msg){
+	ExecResult_t res = exec("PRAGMA table_info(" + table_name + ");", err_msg);
+	Column_t table_info;
+	if(!err_msg.empty()){
+	    return table_info;
+	}
+	auto i_res_end = res.result.end();
+	bool has_dflt = false;
+	KeyFlag_t flg = NORMAL;
+	for(auto i_res = res.result.begin(); i_res != i_res_end; ++i_res){
+	    has_dflt = false;
+	    flg = NORMAL;
+	    if(i_res->at("dflt_value") != ""){
+		has_dflt = true;
+	    }
+	    if(i_res->at("pk") == "1"){
+		flg |= PRIMARY_KEY;
+	    }
+	    if(i_res->at("notnull") == "1"){
+		flg |= NOT_NULL;
+	    }
+
+	    if(has_dflt){
+		table_info[i_res->at("name")]
+		    = Data(i_res->at("dflt_value"), i_res->at("type"),  flg);
+	    }
+	    else{
+		table_info[i_res->at("name")]
+		    = Data(i_res->at("type"), flg);
+	    }
 	}
 	return table_info;
     }

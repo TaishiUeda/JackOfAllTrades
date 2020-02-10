@@ -11,22 +11,25 @@
 #include "SqliteFetcher.hpp"
 
 int main(int argc, char* argv[]) {
-   /* Open database */
+    /* Open database */
     sf::Fetcher sql_fetch("test.db");
 
-   /* Create SQL statement */
+    /* Create SQL statement */
     std::string sql = argv[1];
 
-   /* Execute SQL statement */
+    /* Execute SQL statement */
     std::string err;
     sf::ExecResult_t res = sql_fetch.exec(sql, err);
 
     if(!err.empty()){
 	std::cout << err << std::endl;
-   } else {
-       std::cout << sql_fetch.dump(res) << std::endl;
-   }
-   return 0;
+    } else {
+	std::cout << sql_fetch.dump(res) << std::endl;
+    }
+
+    sf::Column_t table_info = sql_fetch.getTableInfo("company", err);
+
+    return 0;
 }
 
 
