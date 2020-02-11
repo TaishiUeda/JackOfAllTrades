@@ -25,12 +25,16 @@ namespace sf{
 
     using Binary_t = std::vector<int8_t>;
 
+    //! Flags for data values
     using KeyFlag_t = uint8_t;
-    const KeyFlag_t NORMAL = 0u;
+    const KeyFlag_t NORMAL = 0u;//!< Normal, no flags.
     const KeyFlag_t PRIMARY_KEY = 0b00000001;
-    const KeyFlag_t AUTO_INCREMENT = 0b00000010;
-    const KeyFlag_t NOT_NULL = 0b00000100;
+    const KeyFlag_t UNIQUE = 0b00000010;
+    const KeyFlag_t AUTO_INCREMENT = 0b00000100;
+    const KeyFlag_t NOT_NULL = 0b00001000;
+    const KeyFlag_t DEFAULT = 0b00010000;
     
+    //! Sepported types of SQL
     namespace sql_types{
 	using TypeStr_t = std::string;
 	const TypeStr_t INT = "INT";
@@ -62,6 +66,7 @@ namespace sf{
 	const TypeStr_t DATETIME = "DATETIME";
     }
 
+    //! Type conversion into C style.
     const std::map<sql_types::TypeStr_t, Type_t> TypeDef{
 	{sql_types::INT, INT32},
 	    {sql_types::INTEGER, INT32},
@@ -97,39 +102,45 @@ namespace sf{
     class Data{
 	public:
 	    Data();
-	    /*!
-	     * \param[in] is_key If true, this data is to be used as key.
-	     *    Only integer type data can be key.
-	     */
-	    explicit Data(const KeyFlag_t& flg);
+
 	    /*! Set the data type in initializing.
-	     * \param[in] type Type of data
-	     * \param[in] is_key If true, this data is to be used as key.
+	     * \param[in] type Type of data, in SQL string style.
+	     * \param[in] flg Flags of values. Multiple flags can be set as below;<be />
+	     *     - PRIMARY | AUTO_INCRIMENT | NOT_NULL
 	     *    Only integer type data can be key.
 	     */
-	    Data(sql_types::TypeStr_t type, const KeyFlag_t& flg=NORMAL);
-	    /*! Set the data type in initializing.
-	     * \param[in] type Type of data
-	     * \param[in] is_key If true, this data is to be used as key.
-	     *    Only integer type data can be key.
-	     */
-	    Data(const std::string& dflt_str, sql_types::TypeStr_t type, 
+	    Data(sql_types::TypeStr_t type,
 		    const KeyFlag_t& flg=NORMAL);
+
 	    /*! Set the data type in initializing.
-	     * \param[in] type Type of data
+	     * \param[in] dflt_str default value in string style.
+	     * \param[in] type Type of data in SQL string style
+	     * \param[in] flg Flags for value.
+	     */
+	    Data(const std::string& value,
+		    sql_types::TypeStr_t type, const KeyFlag_t& flg=NORMAL);
+
+	    /*! Set the data type in initializing according to data type.
+	     * \param[in] dflt_value default value.
 	     * \param[in] is_key If true, this data is to be used as key.
 	     *    Only integer type data can be key.
 	     */
 	    template<typename T_VALUE>
-		inline Data(const T_VALUE& dflt_value, const KeyFlag_t& flg=NORMAL):
-		    key_flg_(flg){
-		    this->set(dflt_value);
+		inline Data(const T_VALUE& value,
+			const KeyFlag_t& flg=NORMAL):
+		     key_flg_(flg){
+		    this->set(value);
+		    this->setType(type_);
 		}
 
 	    /*! Put value as a string. This is convenient when create query. */
-	    std::string str();
+	    std::string str() const;
 
-	    const sql_types::TypeStr_t& type() const;
+	    const Type_t& type() const;
+
+	    sql_types::TypeStr_t typeStr(const bool& print_flags=true) const;
+
+	    const KeyFlag_t& flags() const;
 
 	    /*! Get value.
 	     * \param[out] value output value.
@@ -138,11 +149,15 @@ namespace sf{
 	     */
 	    template<typename T_OUT>
 		bool get(T_OUT& value) const;
+
+
 	    /*! Set value
 	     * \param[in] value to set.
 	     */
 	    template<typename T_IN>
 		void set(T_IN value);
+
+	    void set(const char* value);
 
 	    void set(const Type_t& type, const std::string& value);
 	    /*! Change value. If a value of different type from Data, it returns false.
@@ -152,8 +167,12 @@ namespace sf{
 	     */
 	    template<typename T_IN>
 		bool change(const T_IN& value);
+
+	    bool change(const char* value);
+
 	private:
 	    void setType(sql_types::TypeStr_t type);
+	    void setType(Type_t type);
 	    bool get(void* value_ptr, const Type_t& type) const;
 	    void set(void* value_ptr, const Type_t& type, const uint32_t& size);
 	    bool change(void* value_ptr, const Type_t& type, const uint32_t& size);
@@ -224,7 +243,8 @@ namespace sf{
      * ```
      *
      */
-    using ColumnList_t  = std::list<Column_t>;
+    using ColumnList_t  = std::vector<Column_t>;
+    using Table_t = std::map<std::string, ColumnList_t>;
 
     //! Database type containing multiple tables.
     /*! An example of creating a table.
@@ -320,7 +340,7 @@ namespace sf{
 	     * \param[out] err_msg Error message. In case of fething successfully, this becomes empty.
 	     * \retval list of columns selected by queries.
 	     */
-	    ColumnList_t fetchColumn(const ExecResult_t& res, std::string& err_msg) const;
+	    ColumnList_t fetchColumn(const ExecResult_t& res, std::string& err_msg);
 
 	    //! Fetch column list from result of executed query for SELECT.
 	    /*!
@@ -345,8 +365,35 @@ namespace sf{
 	     * \retval Table information. This is usefull to create colmuns
 	     *     corresponded to tables in database.
 	     */
-	    Column_t getTableInfo(const std::string table_name, std::string& err_msg);
+	    Column_t getTableInfo(const std::string& table_name, std::string& err_msg);
 
+	    //! Generate queries to create table from a table info.
+	    /*!
+	     * \param[in] table_info Table information containing definition of tables.
+	     * \param[out] err_msg Error message.
+	     * \retval Query message to create table.
+	     */
+	    std::string genQueryCreate(const TableInfo_t& table_info, std::string& err_msg);
+
+	    //! Generate queries to create table from a table info.
+	    /*!
+	     * \param[in] table Table containing columns.
+	     * \param[out] err_msg Error message.
+	     * \retval Query message to create table.
+	     */
+	    std::string genQueryCreate(const Table_t& table, std::string& err_msg);
+	    
+	    //! Generate a query to create table from a column list.
+	    /*! If the column_list doen't contain a data as primary key,
+	     *  a row with primary key is automatically created.
+	     * \param[in] name name of table to be created.
+	     * \param[in] column_list list of columns to be saved in table.
+	     * \param[out] err_msg Error message.
+	     * \retval Query message to create table.
+	     */
+	    std::string genQueryCreate(const std::string& name,
+		    const Column_t& colmun, std::string& err_msg);
+	    
 	    //! Generate a query to create table from a column list.
 	    /*! If the column_list doen't contain a data as primary key,
 	     *  a row with primary key is automatically created.
@@ -358,14 +405,6 @@ namespace sf{
 	    std::string genQueryCreate(const std::string& name,
 		    const ColumnList_t& column_list, std::string& err_msg);
 
-	    //! Generate queries to create table from a table info.
-	    /*!
-	     * \param[in] table_info Table information containing definition of tables.
-	     * \param[out] err_msg Error message.
-	     * \retval Query message to create table.
-	     */
-	    std::string genQueryCreate(const TableInfo_t& table_info, std::string& err_msg);
-
 	    //! Generate a query to insert a column.
 	    /*!
 	     * \param[in] name name of a table to be inserted a column into.
@@ -376,17 +415,15 @@ namespace sf{
 	    std::string genQueryInsert(const std::string& table_name,
 		    const Column_t& col, std::string& err_msg);
 
-	    //! Generate a query to update a column.
-	    /*! This is used to update a column which does not contain primary key,
-	     *  and the user have to point at the target column by input primary hey.
-	     * \param[in] name name of a table to be updated.
-	     * \param[in] col An updated column.
-	     * \param[in] key Primary key of the column.
+	    //! Generate a query to insert a column.
+	    /*!
+	     * \param[in] name name of a table to be inserted a column into.
+	     * \param[in] col A column to be inserted into the table.
 	     * \param[out] err_msg Error message.
 	     * \retval Query message to insert the column into the table.
 	     */
-	    std::string genQueryUpdate(const std::string table_name,
-		    const Column_t& col, const int64_t& key, std::string& err_msg);
+	    std::string genQueryInsert(const std::string& table_name,
+		    const ColumnList_t& col, std::string& err_msg);
 
 	    //! Generate a query to update a column.
 	    /*! This is used to update a column which contains primary key.

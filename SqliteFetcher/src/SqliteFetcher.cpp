@@ -13,24 +13,20 @@ namespace sf{
     // Data
     //---------------------------------------------------------
     Data::Data(){}
-    
-    //---------------------------------------------------------
-    Data::Data(const KeyFlag_t& flg)
-	:key_flg_(flg){}
 
     //---------------------------------------------------------
-    Data::Data(sql_types::TypeStr_t type, const KeyFlag_t& flg)
+    Data::Data(sql_types::TypeStr_t type,
+		    const KeyFlag_t& flg)
 	:key_flg_(flg), type_str_(type){
 	    setType(type);
     }
 
     //---------------------------------------------------------
-    Data::Data(const std::string& dflt_str, sql_types::TypeStr_t type, 
-		    const KeyFlag_t& flg)
+    Data::Data(const std::string& value,
+		    sql_types::TypeStr_t type, const KeyFlag_t& flg)
 	:key_flg_(flg), type_str_(type){
-
 	    setType(type);
-	    set(type_, dflt_str);
+	    set(type_, value);
 	}
 
     //---------------------------------------------------------
@@ -48,10 +44,63 @@ namespace sf{
 	    type_ = BLOB;
 	}
     }
+    //---------------------------------------------------------
+    void Data::setType(Type_t type){
+	switch(type){
+	    case NONE:
+		type_str_ = "NONE";
+		break;
+	    case INT8:
+	    case INT16:
+	    case INT32:
+	    case INT64:
+	    case UINT64:
+		type_str_ = "INTEGER";
+		break;
+	    case FLOAT:
+	    case DOUBLE:
+		type_str_ = "REAL";
+		break;
+	    case BOOL:
+		type_str_ = "NUMERIC";
+		break;
+	    case TEXT:
+		type_str_ = "TEXT";
+		break;
+	    case BLOB:
+		type_str_ = "BLOB";
+		break;
+	}
+    }
 
     //---------------------------------------------------------
-    const sql_types::TypeStr_t& Data::type() const{
-	return type_str_;
+    sql_types::TypeStr_t Data::typeStr(const bool& print_flags) const{
+	std::string ret = type_str_;
+
+	if(print_flags){
+	    if((key_flg_ & PRIMARY_KEY) != 0u){
+		ret += " PRIMARY KEY";
+	    }
+	    if((key_flg_ & UNIQUE) != 0u){
+		ret += " UNIQUE";
+	    }
+	    if((key_flg_ & AUTO_INCREMENT) != 0u){
+		ret += " AUTO INCREMENT";
+	    }
+	    if((key_flg_ & NOT_NULL) != 0u){
+		ret += " NOT NULL";
+	    }
+	    if((key_flg_ & DEFAULT) != 0u){
+		ret += " DEFAULT " + str();
+	    }
+	}
+
+	return ret;
+    }
+
+    
+    const KeyFlag_t& Data::flags() const{
+	return key_flg_;
     }
 
     //---------------------------------------------------------
@@ -127,8 +176,9 @@ namespace sf{
     template<>
     bool Data::get(std::string& value) const{
 	if(this->type_ == TEXT){
+	    value.clear();
 	    for(size_t k=0u; k<this->data_.size(); ++k){
-		value[k] = static_cast<char>(this->data_[k]);
+		value.push_back(static_cast<char>(this->data_[k]));
 	    }
 	    return true;
 	}
@@ -210,6 +260,11 @@ namespace sf{
 	}
 	this->type_ = TEXT;
     }
+    void Data::set(const char* value){
+	std::string str(value);
+	set(str);
+    }
+
     //---------------------------------------------------------
     template<>
     void Data::set(Binary_t value){
@@ -315,6 +370,12 @@ namespace sf{
 	    return false;
 	}
     }
+
+    bool Data::change(const char* value){
+	std::string str(value);
+	return change(str);
+    }
+
     //---------------------------------------------------------
     template<>
     bool Data::change(const Binary_t& value){
@@ -329,7 +390,7 @@ namespace sf{
 
 
     //---------------------------------------------------------
-    std::string Data::str(){
+    std::string Data::str()const{
 	std::string ret;
 	switch(type_){
 	    case NONE:{
@@ -401,7 +462,13 @@ namespace sf{
 			  break;
 		      }
 	}
+
+
 	return ret;
+    }
+
+    const Type_t& Data::type() const{
+	return type_;
     }
 
     //---------------------------------------------------------
@@ -606,17 +673,56 @@ namespace sf{
 
     //-------------------------------------------------------------------
     // Fetch column list from result of executed query for SELECT.
-    ColumnList_t Fetcher::fetchColumn(const ExecResult_t& res, std::string& err_msg) const{
+    ColumnList_t Fetcher::fetchColumn(const ExecResult_t& res, std::string& err_msg){
 	ColumnList_t col;
+	//get table info of selected table.
+	size_t pos = res.in_sql.find("FROM");
+	if(pos == std::string::npos){
+	    pos = res.in_sql.find("from");
+	    if(pos == std::string::npos){
+		err_msg = "This result doesn't seem output of SELECT queries.";
+		return col;
+	    }
+	}
+
+	pos = res.in_sql.find(' ',pos);
+	++pos;
+	while(res.in_sql[pos] == ' '){
+	    ++pos;
+	    if(pos >= res.in_sql.size()){
+		err_msg = "Can't find table name";
+		return col;
+	    }
+	}
+	size_t begin_pos = pos;
+	while(res.in_sql[pos] != ' '){
+	    ++pos;
+	    if(pos >= res.in_sql.size()){
+		break;
+	    }
+	}
+	size_t end_pos = pos;
+	std::string table_name = res.in_sql.substr(begin_pos, end_pos-begin_pos);
+
+	Column_t table_info = getTableInfo(table_name, err_msg);
+
+	auto i_res_end = res.result.end();
+	for(auto i_res = res.result.begin(); i_res != i_res_end; ++i_res){
+	    auto i_elm_end = i_res->end();
+	    Column_t a_col;
+	    for(auto i_elm = i_res->begin(); i_elm != i_elm_end; ++i_elm){
+		const Data& a_data = table_info.at(i_elm->first);
+		a_col[i_elm->first] = Data(a_data);
+		a_col[i_elm->first].set(a_data.type(), i_elm->second);
+	    }
+	    col.push_back(a_col);
+	}
+
 	return col;
     }
 
+    //-------------------------------------------------------------------
     // Get master table.
-    /*
-     * \param[out] err_list List of errors
-     * \retval Table information. This is usefull to create colmuns
-     *     corresponded to tables in database.
-     */
     TableInfo_t Fetcher::getTableInfo(std::string& err_msg){
 	ExecResult_t res = exec("SELECT * FROM sqlite_master;",err_msg);
 	TableInfo_t table_info;
@@ -639,7 +745,8 @@ namespace sf{
 	return table_info;
     }
     
-    Column_t Fetcher::getTableInfo(const std::string table_name, std::string& err_msg){
+    //-------------------------------------------------------------------
+    Column_t Fetcher::getTableInfo(const std::string& table_name, std::string& err_msg){
 	ExecResult_t res = exec("PRAGMA table_info(" + table_name + ");", err_msg);
 	Column_t table_info;
 	if(!err_msg.empty()){
@@ -673,69 +780,165 @@ namespace sf{
 	return table_info;
     }
 
+    //-------------------------------------------------------------------
+    // Generate queries to create table from a table info.
+    std::string Fetcher::genQueryCreate(const TableInfo_t& table_info, std::string& err_msg){
+	std::string ret;
+	auto i_table_end = table_info.end();
+	for(auto i_table=table_info.begin(); i_table != i_table_end; ++i_table){
+	    ret += "CREATE TABLE " + i_table->first + "(";
+	    auto i_col_end = i_table->second.end();
+	    bool is_first = true;
+	    for(auto i_col = i_table->second.begin(); i_col!=i_col_end; ++i_col){
+		if(!is_first){
+		    ret += ", ";
+		}
+		else{
+		    is_first = false;
+		}
+		ret += i_col->first + " " + i_col->second.typeStr();
+	    }
+	    ret += "); ";
+	}
+	return ret;
+    }
+
+    //-------------------------------------------------------------------
+    // Generate queries to create table from a table info.
+    std::string Fetcher::genQueryCreate(const Table_t& table, std::string& err_msg){
+	std::string ret;
+	TableInfo_t a_table_info;
+	auto i_table_end = table.end();
+	for(auto i_table=table.begin(); i_table!=i_table_end; ++i_table){
+	    TableInfo_t a_table_info;
+	    a_table_info[i_table->first] = i_table->second.front();
+	    ret += genQueryCreate(a_table_info, err_msg);
+	    if(err_msg.empty()){
+		break;
+	    }
+	    else{
+		ret += genQueryInsert(i_table->first, i_table->second, err_msg);
+	    }
+
+	    if(err_msg.empty()){
+		break;
+	    }
+	}
+
+	return ret;
+    }
+
+    //-------------------------------------------------------------------
     // Generate a query to create table from a column list.
-    /* If the column_list doen't contain a data as primary key,
-     *  a row with primary key is automatically created.
-     * \param[in] name name of table to be created.
-     * \param[in] column_list list of columns to be saved in table.
-     * \param[out] err_msg Error message.
-     * \retval Query message to create table.
-     */
     std::string Fetcher::genQueryCreate(const std::string& name,
 	    const ColumnList_t& column_list, std::string& err_msg){
 	std::string ret;
-	return ret;
+	Table_t a_table;
+	a_table[name] = column_list;
+	return genQueryCreate(a_table, err_msg);
     }
 
-    // Generate queries to create table from a table info.
-    /*
-     * \param[in] table_info Table information containing definition of tables.
-     * \param[out] err_msg Error message.
-     * \retval Query message to create table.
-     */
-    std::string Fetcher::genQueryCreate(const TableInfo_t& table_info, std::string& err_msg){
+
+    //-------------------------------------------------------------------
+    // Generate a query to create table from a column list.
+    std::string Fetcher::genQueryCreate(const std::string& name,
+	    const Column_t& column, std::string& err_msg){
 	std::string ret;
+	TableInfo_t a_table_info;
+	a_table_info[name] = column;
+	ret = genQueryCreate(a_table_info, err_msg);
+	ret += genQueryInsert(name, column, err_msg);
 	return ret;
     }
 
+    //-------------------------------------------------------------------
     // Generate a query to insert a column.
-    /*
-     * \param[in] name name of a table to be inserted a column into.
-     * \param[in] col A column to be inserted into the table.
-     * \param[out] err_msg Error message.
-     * \retval Query message to insert the column into the table.
-     */
     std::string Fetcher::genQueryInsert(const std::string& table_name,
 	    const Column_t& col, std::string& err_msg){
-	std::string ret;
+	std::string ret = "INSERT INTO " + table_name + "(";
+	auto i_col_end = col.end();
+	bool is_first = true;
+	for(auto i_col = col.begin(); i_col != i_col_end; ++i_col){
+	    if(!is_first){
+		ret += ", ";
+	    }
+	    else{
+		is_first = false;
+	    }
+	    ret += i_col->first;
+        }
+	ret += ") VALUES(";
+	is_first = true;
+	for(auto i_col = col.begin(); i_col != i_col_end; ++i_col){
+	    if(!is_first){
+		ret += ", ";
+	    }
+	    else{
+		is_first = false;
+	    }
+	    if(i_col->second.type() == TEXT){
+		ret += "'" + i_col->second.str() + "'";
+	    }
+	    else{
+		ret += i_col->second.str();
+	    }
+        }
+	ret += "); ";
 	return ret;
     }
 
-    // Generate a query to update a column.
-    /* This is used to update a column which does not contain primary key,
-     *  and the user have to point at the target column by input primary hey.
-     * \param[in] name name of a table to be updated.
-     * \param[in] col An updated column.
-     * \param[in] key Primary key of the column.
-     * \param[out] err_msg Error message.
-     * \retval Query message to insert the column into the table.
-     */
-    std::string Fetcher::genQueryUpdate(const std::string table_name,
-	    const Column_t& col, const int64_t& key, std::string& err_msg){
+    //-------------------------------------------------------------------
+    //! Generate a query to insert a column.
+    std::string Fetcher::genQueryInsert(const std::string& table_name,
+	    const ColumnList_t& col, std::string& err_msg){
+	auto i_col_end = col.end();
 	std::string ret;
+	for(auto i_col = col.begin(); i_col != i_col_end; ++i_col){
+	    ret += genQueryInsert(table_name, *i_col, err_msg);
+	    if(!err_msg.empty()){
+		break;
+	    }
+	}
 	return ret;
+
     }
 
+    //-------------------------------------------------------------------
     // Generate a query to update a column.
-    /* This is used to update a column which contains primary key.
-     * \param[in] name name of a table to be updated.
-     * \param[in] col An updated column.
-     * \param[out] err_msg Error message.
-     * \retval Query message to insert the column into the table.
-     */
     std::string Fetcher::genQueryUpdate(const std::string& table_name,
 	    const Column_t& col, std::string& err_msg){
-	std::string ret;
+	std::string ret = "UPDATE "+ table_name +" SET ";
+	bool has_id=false;
+	bool is_first = true;
+	auto i_col_end = col.end();
+	std::string key_str;
+	for(auto i_col=col.begin(); i_col != i_col_end; ++i_col){
+	    if((i_col->second.flags() & PRIMARY_KEY) != 0u){
+		key_str = " WHERE " + i_col->first
+		    + " = " + i_col->second.str();
+		has_id = true;
+	    }
+	    else{
+		if(!is_first){
+		    ret += ", ";
+		}
+		else{
+		    is_first = false;
+		}
+		ret += i_col->first + " = ";
+		if(i_col->second.type() == TEXT){
+		    ret += "'" + i_col->second.str() + "'";
+		}
+		else{
+		    ret += i_col->second.str();
+		}
+	    }
+	}
+
+	if(has_id){
+	    ret += key_str;
+	}
+
 	return ret;
     }
 }
