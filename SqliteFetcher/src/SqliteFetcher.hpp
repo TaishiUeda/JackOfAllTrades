@@ -106,14 +106,18 @@ namespace sf{
 	    /*! Set the data type in initializing.
 	     * \param[in] type Type of data, in SQL string style.
 	     * \param[in] flg Flags of values. Multiple flags can be set as below;<be />
-	     *     - PRIMARY | AUTO_INCRIMENT | NOT_NULL
-	     *    Only integer type data can be key.
+             *   - NORMAL : default set
+             *   - PRIMARY_KEY
+             *   - UNIQUE
+             *   - AUTO_INCREMENT
+             *   - NOT_NULL
+             *   - DEFAULT : If this flag is set, the contained value becomes default value when this is used in creating table.
 	     */
 	    Data(sql_types::TypeStr_t type,
 		    const KeyFlag_t& flg=NORMAL);
 
 	    /*! Set the data type in initializing.
-	     * \param[in] dflt_str default value in string style.
+	     * \param[in] value initial value. This converted appropriate type according to the input type.
 	     * \param[in] type Type of data in SQL string style
 	     * \param[in] flg Flags for value.
 	     */
@@ -121,9 +125,8 @@ namespace sf{
 		    sql_types::TypeStr_t type, const KeyFlag_t& flg=NORMAL);
 
 	    /*! Set the data type in initializing according to data type.
-	     * \param[in] dflt_value default value.
-	     * \param[in] is_key If true, this data is to be used as key.
-	     *    Only integer type data can be key.
+	     * \param[in] value initial value.
+	     * \param[in] flg Flags for value.
 	     */
 	    template<typename T_VALUE>
 		inline Data(const T_VALUE& value,
@@ -133,11 +136,16 @@ namespace sf{
 		    this->setType(type_);
 		}
 
-	    /*! Put value as a string. This is convenient when create query. */
+	    //! Put value as a string. This is convenient when create query.
 	    std::string str() const;
 
+	    //! Put type
 	    const Type_t& type() const;
 
+	    /*! Put type in string style.
+	     * \param[in] print_flags If it is true, output strig includes flag statements.
+	     * \retval type statements.
+	     */
 	    sql_types::TypeStr_t typeStr(const bool& print_flags=true) const;
 
 	    const KeyFlag_t& flags() const;
@@ -150,7 +158,6 @@ namespace sf{
 	    template<typename T_OUT>
 		bool get(T_OUT& value) const;
 
-
 	    /*! Set value
 	     * \param[in] value to set.
 	     */
@@ -160,6 +167,7 @@ namespace sf{
 	    void set(const char* value);
 
 	    void set(const Type_t& type, const std::string& value);
+
 	    /*! Change value. If a value of different type from Data, it returns false.
 	     * \param[in] value to set.
 	     * \retval true success
@@ -190,80 +198,56 @@ namespace sf{
      * ## Construct
      *
      * ### Detemine data types
+     *
      * ```cpp
      * Column_t col = {
-     *     {"ID", Data(INT64, true)},
+     *     {"ID", Data(INT64, PRIMARY_KEY)},
      *     {"First name", Data(TEXT)},
      *     {"Second name", Data(TEXT)},
      *     {"Age", Data(INT32)},
      *     {"Height_cm", Data(REAL)},
      *     {"Weight_kg", Data(REAL)},
      * };
+     * ```
      *
      * ### Detemine data value and each type is detemined automatically.
+     *
      * ```cpp
      * Column_t col = {
-     *     {"ID", Data(INT64, true)},
-     *     {"First name", Data(TEXT)},
-     *     {"Second name", Data(TEXT)},
-     *     {"Age", Data(INT32)},
-     *     {"Height_cm", Data(REAL)},
-     *     {"Weight_kg", Data(REAL)},
+     *     {"ID", Data(0, PRIMARY_KEY)},
+     *     {"First name", Data("Alina")},
+     *     {"Second name", Data("Rain")},
+     *     {"Age", Data("28")},
+     *     {"Height_cm", Data("168.2")},
+     *     {"Weight_kg", Data("49,3")},
      * };
-     *
-     *
-     * // Set values
-     * col["ID"].change(0);
-     * col["First name"].change("Alina");
-     * col["Second name"].change("Rain");
-     * col["Age"].change(28)}]
-     * col["Height_cm"].change(165.7);
-     * col["Weight_kg"].change(49.3);
      * ```
      */
     using Column_t = std::map<std::string, Data>;
 
-    //! Column type. This is a list of column.
-    /*! An example of creating a table.
-     *
-     * ```cpp
-     * Table_t table_1 = {col_1, col_2};
-     * ```
-     *
-     * or,
-     *
-     * ```cpp
-     * Table_t table_1;
-     * table_1.push_back(col_1);
-     * table_1.push_back(col_2);
-     * ```
-     *
-     * In case of creating only header.
-     *
-     * ```
-     *
-     */
+    //! ColumnList type. This is a vector of column.
     using ColumnList_t  = std::vector<Column_t>;
-    using Table_t = std::map<std::string, ColumnList_t>;
 
-    //! Database type containing multiple tables.
+    //! Table type. This has string name as keys and vectors of column data.
     /*! An example of creating a table.
      *
      * ```cpp
-     * DataBase_t db_1 = {
-     *     {"Table_1", column_list_1},
-     *     {"Table_2", column_list_2},
+     * Table_t table = {
+     *     {"list1", column_list_1},
+     *     {"list2", column_list_2},
      * };
      * ```
      *
      * or,
      *
      * ```cpp
-     * DataBase_t db_1;
-     * db_1["Table_1"] = column_list_1;
-     * db_1["Table_2"] = column_list_2;
+     * Table_t table
+     * db_1["list1"] = column_list_1;
+     * db_1["list2"] = column_list_2;
      * ```
      */
+    using Table_t = std::map<std::string, ColumnList_t>;
+
     using TableInfo_t  = std::map<std::string, Column_t>;
     using ResultElement_t = std::map<std::string,std::string>;
     using Result_t = std::vector<ResultElement_t>;
