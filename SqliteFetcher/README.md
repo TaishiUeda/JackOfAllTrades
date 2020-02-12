@@ -42,7 +42,7 @@ std::string query = sql_fetch.genQueryCreate(table_info_A, err_msg);
 ExecResult_t res = sql_fetch.exec(str, err_msg);
 ```
 
-And, below is a code to get certain columns and save it into a ontainer;
+And, below is a code to get certain columns and save it into a container;
 
 ```cpp
 //Execute a query to "SELECT"
