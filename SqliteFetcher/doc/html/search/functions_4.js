@@ -1,8 +1,0 @@
-var searchData=
-[
-  ['genquerycreate',['genQueryCreate',['../classsf_1_1Fetcher.html#aea913bb72d38e556cef1ee73a508ca1c',1,'sf::Fetcher::genQueryCreate(const TableInfo_t &amp;table_info, std::string &amp;err_msg)'],['../classsf_1_1Fetcher.html#a6c12731a724a6a142e2281b45520eaa9',1,'sf::Fetcher::genQueryCreate(const Table_t &amp;table, std::string &amp;err_msg)'],['../classsf_1_1Fetcher.html#a6a49181b22e198a9e026d8df645f2dc2',1,'sf::Fetcher::genQueryCreate(const std::string &amp;table_name, const Column_t &amp;column, std::string &amp;err_msg)'],['../classsf_1_1Fetcher.html#a2a9ca41a620dc5669d836bd7b3a76e5b',1,'sf::Fetcher::genQueryCreate(const std::string &amp;table_name, const ColumnList_t &amp;column_list, std::string &amp;err_msg)']]],
-  ['genqueryinsert',['genQueryInsert',['../classsf_1_1Fetcher.html#afbf3136935c57a7ebc7099736317045a',1,'sf::Fetcher::genQueryInsert(const std::string &amp;table_name, const Column_t &amp;col, std::string &amp;err_msg)'],['../classsf_1_1Fetcher.html#a52a84a42b41437053d76fc50b25a96f1',1,'sf::Fetcher::genQueryInsert(const std::string &amp;table_name, const ColumnList_t &amp;col, std::string &amp;err_msg)']]],
-  ['genqueryupdate',['genQueryUpdate',['../classsf_1_1Fetcher.html#a56132c7d0d418133d1ad5db4c3749aed',1,'sf::Fetcher']]],
-  ['get',['get',['../classsf_1_1Data.html#a059208eaed62d30be3abe34276441740',1,'sf::Data']]],
-  ['gettableinfo',['getTableInfo',['../classsf_1_1Fetcher.html#a0bd974c01baa3ef6f5401ea2b75fc22d',1,'sf::Fetcher::getTableInfo(std::string &amp;err_msg)'],['../classsf_1_1Fetcher.html#a0d07d8cdd83c59e3c0dd4cc0409ecffa',1,'sf::Fetcher::getTableInfo(const std::string &amp;table_name, std::string &amp;err_msg)']]]
-];
