@@ -1,3 +1,12 @@
+/*
+ * CppSqlParser.hpp
+ *
+ * Copyright (C) 2020 Taishi Ueda <taishi.ueda@gmail.com>
+ *
+ * Distributed under terms of the MIT license.
+ * http://opensource.org/licenses/mit-license.php
+ */
+
 #ifndef CPPSQLPARSER_HPP
 #define CPPSQLPARSER_HPP
 #include <sqlite3.h>
@@ -119,8 +128,14 @@ namespace sf{
              * \li NOT_NULL
              * \li DEFAULT : If this flag is set, the contained value becomes default value when this is used in creating table.
 	     */
-	    Data(sql_types::TypeStr_t type,
-		    const KeyFlag_t& flg=NORMAL);
+	    Data(sql_types::TypeStr_t type, const KeyFlag_t& flg=NORMAL);
+
+	    //! Set the data type in initializing.
+	    /*! 
+	     * \param[in] type Type of data, in sf::Type_t
+	     * \param[in] flg Flags for value. See [here](#flag_exp).
+	     */
+	    Data(const Type_t& type, const KeyFlag_t& flg=NORMAL);
 
 	    //! Set the data type in initializing.
 	    /*!
@@ -284,21 +299,23 @@ namespace sf{
     /*! Exanples for creating a TableInfo_t.
      *
      * ```cpp
-     * TableInto_t table_info = {
-     *    {"user", 
-     *        {"ID", Data(INT64, PRIMARY_KEY | NOT_NULL)},
-     *        {"name", Data(TEXT, NOT_NULL)},
-     *        {"sex", Data(TEXT)},
-     *        {"age", Data(INT8)},
-     *        {"countory", Data(TEXT)},
-     *        {"height_cm", Data(FLOAT)},
-     *    },
-     *    {"area", 
-     *        {"ID", Data(INT64, PRIMARY_KEY | NOT_NULL)},
-     *        {"countory", Data("Japan", NOT_NULL | DEFAULT)},
-     *        {"prefecture", Data(TEXT)},
-     *        {"population", Data(DOUBLE)},
-     *    },
+     * TableInfo_t table_info = {
+     *     {"user",{ 
+     *     	    {"ID", Data(INT64, PRIMARY_KEY | NOT_NULL)},
+     *     	    {"name", Data(TEXT, NOT_NULL)},
+     *     	    {"sex", Data(TEXT)},
+     *     	    {"age", Data(INT8)},
+     *     	    {"countory", Data(TEXT)},
+     *     	    {"height_cm", Data(FLOAT)},
+     *     	}
+     *     },
+     *     {"area",{ 
+     *     	    {"ID", Data(INT64, PRIMARY_KEY | NOT_NULL)},
+     *     	    {"countory", Data("Japan", NOT_NULL | DEFAULT)},
+     *     	    {"prefecture", Data(TEXT)},
+     *     	    {"population", Data(DOUBLE)},
+     *     	}
+     *     }
      * };
      * ```
      *

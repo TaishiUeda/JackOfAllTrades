@@ -1,8 +1,10 @@
 /*
  * CppSqlParser.cpp
- * Copyright (C) 2020 uedataishi <uedataishi@Mac-mini.local>
+ *
+ * Copyright (C) 2020 Taishi Ueda <taishi.ueda@gmail.com>
  *
  * Distributed under terms of the MIT license.
+ * http://opensource.org/licenses/mit-license.php
  */
 
 #include "SqliteFetcher.hpp"
@@ -21,6 +23,11 @@ namespace sf{
 	    setType(type);
     }
 
+    //---------------------------------------------------------
+    Data::Data(const Type_t& type, const KeyFlag_t& flg)
+    :key_flg_(flg) ,type_(type) {
+	setType(type);
+    }
     //---------------------------------------------------------
     Data::Data(const std::string& value,
 		    sql_types::TypeStr_t type, const KeyFlag_t& flg)
@@ -656,7 +663,7 @@ namespace sf{
 	    }
 	    ret += "}";
 	}
-	ret += "]}";
+	ret += "]}\n";
 	return ret;
     }
 
@@ -664,10 +671,18 @@ namespace sf{
     //! Dump result of exec function into string.
     std::string Fetcher::dump(const std::list<ExecResult_t>& res_list) const{
 	auto i_res_end = res_list.end();
-	std::string ret;
+	std::string ret = "{\"exec_result\": [";
+	bool is_first=true;
 	for(auto i_res =res_list.begin(); i_res != i_res_end; ++i_res){
+	    if(!is_first){
+		ret += ",";
+	    }
+	    else{
+		is_first = false;
+	    }
 	    ret += dump(*i_res);
 	}
+	ret += "]}\n";
 	return ret;
     }
 
@@ -675,6 +690,7 @@ namespace sf{
     // Fetch column list from result of executed query for SELECT.
     ColumnList_t Fetcher::fetchColumn(const ExecResult_t& res, std::string& err_msg){
 	ColumnList_t col;
+	err_msg.clear();
 	//get table info of selected table.
 	size_t pos = res.in_sql.find("FROM");
 	if(pos == std::string::npos){
@@ -724,6 +740,7 @@ namespace sf{
     //-------------------------------------------------------------------
     // Get master table.
     TableInfo_t Fetcher::getTableInfo(std::string& err_msg){
+	err_msg.clear();
 	ExecResult_t res = exec("SELECT * FROM sqlite_master;",err_msg);
 	TableInfo_t table_info;
 	if(!err_msg.empty()){
@@ -747,6 +764,7 @@ namespace sf{
     
     //-------------------------------------------------------------------
     Column_t Fetcher::getTableInfo(const std::string& table_name, std::string& err_msg){
+	err_msg.clear();
 	ExecResult_t res = exec("PRAGMA table_info(" + table_name + ");", err_msg);
 	Column_t table_info;
 	if(!err_msg.empty()){
@@ -783,6 +801,7 @@ namespace sf{
     //-------------------------------------------------------------------
     // Generate queries to create table from a table info.
     std::string Fetcher::genQueryCreate(const TableInfo_t& table_info, std::string& err_msg){
+	err_msg.clear();
 	std::string ret;
 	auto i_table_end = table_info.end();
 	for(auto i_table=table_info.begin(); i_table != i_table_end; ++i_table){
@@ -806,6 +825,7 @@ namespace sf{
     //-------------------------------------------------------------------
     // Generate queries to create table from a table info.
     std::string Fetcher::genQueryCreate(const Table_t& table, std::string& err_msg){
+	err_msg.clear();
 	std::string ret;
 	TableInfo_t a_table_info;
 	auto i_table_end = table.end();
@@ -813,14 +833,14 @@ namespace sf{
 	    TableInfo_t a_table_info;
 	    a_table_info[i_table->first] = i_table->second.front();
 	    ret += genQueryCreate(a_table_info, err_msg);
-	    if(err_msg.empty()){
+	    if(!err_msg.empty()){
 		break;
 	    }
 	    else{
 		ret += genQueryInsert(i_table->first, i_table->second, err_msg);
 	    }
 
-	    if(err_msg.empty()){
+	    if(!err_msg.empty()){
 		break;
 	    }
 	}
@@ -832,6 +852,7 @@ namespace sf{
     // Generate a query to create table from a column list.
     std::string Fetcher::genQueryCreate(const std::string& name,
 	    const ColumnList_t& column_list, std::string& err_msg){
+	err_msg.clear();
 	std::string ret;
 	Table_t a_table;
 	a_table[name] = column_list;
@@ -843,6 +864,7 @@ namespace sf{
     // Generate a query to create table from a column list.
     std::string Fetcher::genQueryCreate(const std::string& name,
 	    const Column_t& column, std::string& err_msg){
+	err_msg.clear();
 	std::string ret;
 	TableInfo_t a_table_info;
 	a_table_info[name] = column;
@@ -855,6 +877,7 @@ namespace sf{
     // Generate a query to insert a column.
     std::string Fetcher::genQueryInsert(const std::string& table_name,
 	    const Column_t& col, std::string& err_msg){
+	err_msg.clear();
 	std::string ret = "INSERT INTO " + table_name + "(";
 	auto i_col_end = col.end();
 	bool is_first = true;
@@ -891,6 +914,7 @@ namespace sf{
     //! Generate a query to insert a column.
     std::string Fetcher::genQueryInsert(const std::string& table_name,
 	    const ColumnList_t& col, std::string& err_msg){
+	err_msg.clear();
 	auto i_col_end = col.end();
 	std::string ret;
 	for(auto i_col = col.begin(); i_col != i_col_end; ++i_col){
@@ -907,6 +931,7 @@ namespace sf{
     // Generate a query to update a column.
     std::string Fetcher::genQueryUpdate(const std::string& table_name,
 	    const Column_t& col, std::string& err_msg){
+	err_msg.clear();
 	std::string ret = "UPDATE "+ table_name +" SET ";
 	bool has_id=false;
 	bool is_first = true;
