@@ -1,0 +1,304 @@
+\hypertarget{classsf_1_1Data}{}\section{sf\+:\+:Data Class Reference}
+\label{classsf_1_1Data}\index{sf\+::\+Data@{sf\+::\+Data}}
+
+
+\hyperlink{classsf_1_1Data}{Data} container class.  
+
+
+
+
+{\ttfamily \#include $<$Sqlite\+Fetcher.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classsf_1_1Data_a769fa07620e67e3d5a6d496f8777e770}{Data} (\hyperlink{namespacesf_1_1sql__types_a1a4f114cdf79706d2298e3454006e65b}{sql\+\_\+types\+::\+Type\+Str\+\_\+t} \hyperlink{classsf_1_1Data_ae7321e2f6bb059074d30ddddcdd7409d}{type}, const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} \&flg=\hyperlink{namespacesf_a50b38ab4427343bee97887908a3fb1c8}{N\+O\+R\+M\+AL})
+\begin{DoxyCompactList}\small\item\em Set the data type in initializing. \end{DoxyCompactList}\item 
+\hyperlink{classsf_1_1Data_ad53ebd8c5a2798dd38f54a274881ba35}{Data} (const std\+::string \&value, \hyperlink{namespacesf_1_1sql__types_a1a4f114cdf79706d2298e3454006e65b}{sql\+\_\+types\+::\+Type\+Str\+\_\+t} \hyperlink{classsf_1_1Data_ae7321e2f6bb059074d30ddddcdd7409d}{type}, const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} \&flg=\hyperlink{namespacesf_a50b38ab4427343bee97887908a3fb1c8}{N\+O\+R\+M\+AL})
+\begin{DoxyCompactList}\small\item\em Set the data type in initializing. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T\+\_\+\+V\+A\+L\+UE $>$ }\\\hyperlink{classsf_1_1Data_ae5c8d4e4df0050e0c86614d38c00c07d}{Data} (const T\+\_\+\+V\+A\+L\+UE \&value, const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} \&flg=\hyperlink{namespacesf_a50b38ab4427343bee97887908a3fb1c8}{N\+O\+R\+M\+AL})
+\begin{DoxyCompactList}\small\item\em Set the data type in initializing according to data type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsf_1_1Data_a7e0adbd3c15928e2e98829c6aa3955ba}\label{classsf_1_1Data_a7e0adbd3c15928e2e98829c6aa3955ba}} 
+std\+::string \hyperlink{classsf_1_1Data_a7e0adbd3c15928e2e98829c6aa3955ba}{str} () const
+\begin{DoxyCompactList}\small\item\em Put value as a string. This is convenient when create query. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsf_1_1Data_ae7321e2f6bb059074d30ddddcdd7409d}\label{classsf_1_1Data_ae7321e2f6bb059074d30ddddcdd7409d}} 
+const \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93f}{Type\+\_\+t} \& \hyperlink{classsf_1_1Data_ae7321e2f6bb059074d30ddddcdd7409d}{type} () const
+\begin{DoxyCompactList}\small\item\em Put type. \end{DoxyCompactList}\item 
+\hyperlink{namespacesf_1_1sql__types_a1a4f114cdf79706d2298e3454006e65b}{sql\+\_\+types\+::\+Type\+Str\+\_\+t} \hyperlink{classsf_1_1Data_a3035efa0296877d2ae01ae64733dd2e2}{type\+Str} (const bool \&print\+\_\+flags=true) const
+\item 
+const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} \& \hyperlink{classsf_1_1Data_ab57c8e4cea0ce97e16f14412748e28aa}{flags} () const
+\item 
+{\footnotesize template$<$typename T\+\_\+\+O\+UT $>$ }\\bool \hyperlink{classsf_1_1Data_a059208eaed62d30be3abe34276441740}{get} (T\+\_\+\+O\+UT \&value) const
+\item 
+{\footnotesize template$<$typename T\+\_\+\+IN $>$ }\\void \hyperlink{classsf_1_1Data_a1544ae4ac13d303ba2e791d12a917737}{set} (T\+\_\+\+IN value)
+\begin{DoxyCompactList}\small\item\em Set value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsf_1_1Data_a7034d44cdf6bac324068e4b0f3fe8f7c}\label{classsf_1_1Data_a7034d44cdf6bac324068e4b0f3fe8f7c}} 
+void {\bfseries set} (const char $\ast$value)
+\item 
+void \hyperlink{classsf_1_1Data_a5d9c2b395b10b0a6359e6c36ab6a22ff}{set} (const \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93f}{Type\+\_\+t} \&\hyperlink{classsf_1_1Data_ae7321e2f6bb059074d30ddddcdd7409d}{type}, const std\+::string \&value)
+\begin{DoxyCompactList}\small\item\em Set value. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T\+\_\+\+IN $>$ }\\bool \hyperlink{classsf_1_1Data_afcaf630fd9d6ebf67204af04381afac4}{change} (const T\+\_\+\+IN \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a267205f998ea8693a37b4f878f6eaec0}\label{classsf_1_1Data_a267205f998ea8693a37b4f878f6eaec0}} 
+bool {\bfseries change} (const char $\ast$value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_ad643f60b3a4810f7bbc0528ed1aec92a}\label{classsf_1_1Data_ad643f60b3a4810f7bbc0528ed1aec92a}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (int8\+\_\+t \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_af527a0f187def1363fe69cb8fdab896b}\label{classsf_1_1Data_af527a0f187def1363fe69cb8fdab896b}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (int16\+\_\+t \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a6a3cc4c3e8f0af8bf632ae9d52ca42ef}\label{classsf_1_1Data_a6a3cc4c3e8f0af8bf632ae9d52ca42ef}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (int32\+\_\+t \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a6247b7275823cb2588577fcecb3ad692}\label{classsf_1_1Data_a6247b7275823cb2588577fcecb3ad692}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (int64\+\_\+t \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a5a9324e77d49123de1876bf32a550068}\label{classsf_1_1Data_a5a9324e77d49123de1876bf32a550068}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (uint64\+\_\+t \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a1471371a0081be5def657b05371031c6}\label{classsf_1_1Data_a1471371a0081be5def657b05371031c6}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (float \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a44bdd204fb298ff67e235ccba8e91e55}\label{classsf_1_1Data_a44bdd204fb298ff67e235ccba8e91e55}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (double \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_ae861d8b7fe6500a3e74f2315d3b3f8b5}\label{classsf_1_1Data_ae861d8b7fe6500a3e74f2315d3b3f8b5}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (std\+::string \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a3ac746564c03e46ddf45e5b42798cdaf}\label{classsf_1_1Data_a3ac746564c03e46ddf45e5b42798cdaf}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (bool \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a708c70ee2ba6fd208eee63e2d0ca4d5b}\label{classsf_1_1Data_a708c70ee2ba6fd208eee63e2d0ca4d5b}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries get} (\hyperlink{namespacesf_a3cfcc379b8afaf098c4e1aa67ef92186}{Binary\+\_\+t} \&value) const
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a25211c3c2119b7b9acf89f83e0a62c72}\label{classsf_1_1Data_a25211c3c2119b7b9acf89f83e0a62c72}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (int8\+\_\+t value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_af3b3831b4fadbea4df41cc911e47409a}\label{classsf_1_1Data_af3b3831b4fadbea4df41cc911e47409a}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (int16\+\_\+t value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_ac0700ab9f1118d88cbe2754057102b02}\label{classsf_1_1Data_ac0700ab9f1118d88cbe2754057102b02}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (int32\+\_\+t value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a8ea74f142ca1a1e68fc72d33b336a8f3}\label{classsf_1_1Data_a8ea74f142ca1a1e68fc72d33b336a8f3}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (int64\+\_\+t value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a619aebd253875a352e3cdaf5eb3dd163}\label{classsf_1_1Data_a619aebd253875a352e3cdaf5eb3dd163}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (uint64\+\_\+t value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a188831bcb2e11cde98ed387665a1f45f}\label{classsf_1_1Data_a188831bcb2e11cde98ed387665a1f45f}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (bool value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a7a499c96dba075521bed830d760198af}\label{classsf_1_1Data_a7a499c96dba075521bed830d760198af}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (float value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a2e0195a4209d8b9642f4f2e17722104b}\label{classsf_1_1Data_a2e0195a4209d8b9642f4f2e17722104b}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (double value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a99022ecec3218c81bb74f24d1b3a1bbd}\label{classsf_1_1Data_a99022ecec3218c81bb74f24d1b3a1bbd}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (std\+::string value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a9ae956ea74c16664d0a0e5d2366bbb0b}\label{classsf_1_1Data_a9ae956ea74c16664d0a0e5d2366bbb0b}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries set} (\hyperlink{namespacesf_a3cfcc379b8afaf098c4e1aa67ef92186}{Binary\+\_\+t} value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a4dc68aad54c61a8e3625f4ede262ccb3}\label{classsf_1_1Data_a4dc68aad54c61a8e3625f4ede262ccb3}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const int8\+\_\+t \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_ab3d3436ada0f0f538c1ccec8c69f20d2}\label{classsf_1_1Data_ab3d3436ada0f0f538c1ccec8c69f20d2}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const int16\+\_\+t \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a971aa7ec9562f7148a5f0575184fc412}\label{classsf_1_1Data_a971aa7ec9562f7148a5f0575184fc412}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const int32\+\_\+t \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a0e9b414634fdf3a20b2339a0d6db33f0}\label{classsf_1_1Data_a0e9b414634fdf3a20b2339a0d6db33f0}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const int64\+\_\+t \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a2e67db10d44212ed9f1b2e0229024ebc}\label{classsf_1_1Data_a2e67db10d44212ed9f1b2e0229024ebc}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const uint64\+\_\+t \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a5055ec41fd0add2d048bdd715f1e230d}\label{classsf_1_1Data_a5055ec41fd0add2d048bdd715f1e230d}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const float \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a697924f93bdf53a7ceaefce10da0bacd}\label{classsf_1_1Data_a697924f93bdf53a7ceaefce10da0bacd}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const double \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a49cd4b4f6565ef8958e00a4f09a19e3a}\label{classsf_1_1Data_a49cd4b4f6565ef8958e00a4f09a19e3a}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const bool \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a5aac71e00c0c6703308ca37c782ff4b7}\label{classsf_1_1Data_a5aac71e00c0c6703308ca37c782ff4b7}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const std\+::string \&value)
+\item 
+\mbox{\Hypertarget{classsf_1_1Data_a08c2f84222ff2af793f6df50f497fc10}\label{classsf_1_1Data_a08c2f84222ff2af793f6df50f497fc10}} 
+{\footnotesize template$<$$>$ }\\bool {\bfseries change} (const \hyperlink{namespacesf_a3cfcc379b8afaf098c4e1aa67ef92186}{Binary\+\_\+t} \&value)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classsf_1_1Data}{Data} container class. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classsf_1_1Data_a769fa07620e67e3d5a6d496f8777e770}\label{classsf_1_1Data_a769fa07620e67e3d5a6d496f8777e770}} 
+\index{sf\+::\+Data@{sf\+::\+Data}!Data@{Data}}
+\index{Data@{Data}!sf\+::\+Data@{sf\+::\+Data}}
+\subsubsection{\texorpdfstring{Data()}{Data()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily sf\+::\+Data\+::\+Data (\begin{DoxyParamCaption}\item[{\hyperlink{namespacesf_1_1sql__types_a1a4f114cdf79706d2298e3454006e65b}{sql\+\_\+types\+::\+Type\+Str\+\_\+t}}]{type,  }\item[{const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} \&}]{flg = {\ttfamily \hyperlink{namespacesf_a50b38ab4427343bee97887908a3fb1c8}{N\+O\+R\+M\+AL}} }\end{DoxyParamCaption})}
+
+
+
+Set the data type in initializing. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em type} & Type of data, in S\+QL string style. \\
+\hline
+\mbox{\tt in}  & {\em flg} & Flags for constraints of values. Multiple flags can be set with pipe. (e.\+g P\+R\+I\+M\+A\+R\+Y\+\_\+\+K\+EY $\vert$ A\+U\+T\+O\+\_\+\+I\+N\+C\+R\+E\+M\+E\+NT) \label{_flag_exp}%
+ \begin{DoxyItemize}
+\item N\+O\+R\+M\+A\+L(nothing constraints) \item P\+R\+I\+M\+A\+R\+Y\+\_\+\+K\+EY \item U\+N\+I\+Q\+UE \item A\+U\+T\+O\+\_\+\+I\+N\+C\+R\+E\+M\+E\+NT \item N\+O\+T\+\_\+\+N\+U\+LL \item D\+E\+F\+A\+U\+LT \+: If this flag is set, the contained value becomes default value when this is used in creating table. \end{DoxyItemize}
+\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsf_1_1Data_ad53ebd8c5a2798dd38f54a274881ba35}\label{classsf_1_1Data_ad53ebd8c5a2798dd38f54a274881ba35}} 
+\index{sf\+::\+Data@{sf\+::\+Data}!Data@{Data}}
+\index{Data@{Data}!sf\+::\+Data@{sf\+::\+Data}}
+\subsubsection{\texorpdfstring{Data()}{Data()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily sf\+::\+Data\+::\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{value,  }\item[{\hyperlink{namespacesf_1_1sql__types_a1a4f114cdf79706d2298e3454006e65b}{sql\+\_\+types\+::\+Type\+Str\+\_\+t}}]{type,  }\item[{const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} \&}]{flg = {\ttfamily \hyperlink{namespacesf_a50b38ab4427343bee97887908a3fb1c8}{N\+O\+R\+M\+AL}} }\end{DoxyParamCaption})}
+
+
+
+Set the data type in initializing. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em value} & initial value. This is converted to appropriate type according to the input \char`\"{}type\char`\"{}. \\
+\hline
+\mbox{\tt in}  & {\em type} & Type of data in S\+QL string style \\
+\hline
+\mbox{\tt in}  & {\em flg} & Flags for value. See \href{#flag_exp}{\tt here}. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsf_1_1Data_ae5c8d4e4df0050e0c86614d38c00c07d}\label{classsf_1_1Data_ae5c8d4e4df0050e0c86614d38c00c07d}} 
+\index{sf\+::\+Data@{sf\+::\+Data}!Data@{Data}}
+\index{Data@{Data}!sf\+::\+Data@{sf\+::\+Data}}
+\subsubsection{\texorpdfstring{Data()}{Data()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T\+\_\+\+V\+A\+L\+UE $>$ \\
+sf\+::\+Data\+::\+Data (\begin{DoxyParamCaption}\item[{const T\+\_\+\+V\+A\+L\+UE \&}]{value,  }\item[{const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} \&}]{flg = {\ttfamily \hyperlink{namespacesf_a50b38ab4427343bee97887908a3fb1c8}{N\+O\+R\+M\+AL}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the data type in initializing according to data type. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em value} & initial value. \\
+\hline
+\mbox{\tt in}  & {\em flg} & Flags for value. See \href{#flag_exp}{\tt here}. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classsf_1_1Data_afcaf630fd9d6ebf67204af04381afac4}\label{classsf_1_1Data_afcaf630fd9d6ebf67204af04381afac4}} 
+\index{sf\+::\+Data@{sf\+::\+Data}!change@{change}}
+\index{change@{change}!sf\+::\+Data@{sf\+::\+Data}}
+\subsubsection{\texorpdfstring{change()}{change()}}
+{\footnotesize\ttfamily template$<$typename T\+\_\+\+IN $>$ \\
+bool sf\+::\+Data\+::change (\begin{DoxyParamCaption}\item[{const T\+\_\+\+IN \&}]{value }\end{DoxyParamCaption})}
+
+Change value. If the value is different type from type which has already been set, it returns false. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em value} & to set. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em true} & success \\
+\hline
+{\em false} & type of value and that of value contained already are different. \\
+\hline
+\end{DoxyRetVals}
+\mbox{\Hypertarget{classsf_1_1Data_ab57c8e4cea0ce97e16f14412748e28aa}\label{classsf_1_1Data_ab57c8e4cea0ce97e16f14412748e28aa}} 
+\index{sf\+::\+Data@{sf\+::\+Data}!flags@{flags}}
+\index{flags@{flags}!sf\+::\+Data@{sf\+::\+Data}}
+\subsubsection{\texorpdfstring{flags()}{flags()}}
+{\footnotesize\ttfamily const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} \& sf\+::\+Data\+::flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Put flags 
+\begin{DoxyRetVals}{Return values}
+{\em flags} & flag as Key\+Flag\+\_\+t type \\
+\hline
+\end{DoxyRetVals}
+\mbox{\Hypertarget{classsf_1_1Data_a059208eaed62d30be3abe34276441740}\label{classsf_1_1Data_a059208eaed62d30be3abe34276441740}} 
+\index{sf\+::\+Data@{sf\+::\+Data}!get@{get}}
+\index{get@{get}!sf\+::\+Data@{sf\+::\+Data}}
+\subsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily template$<$typename T\+\_\+\+O\+UT $>$ \\
+bool sf\+::\+Data\+::get (\begin{DoxyParamCaption}\item[{T\+\_\+\+O\+UT \&}]{value }\end{DoxyParamCaption}) const}
+
+Get value. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em value} & output value. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em true} & success \\
+\hline
+{\em false} & type of value and that of \hyperlink{classsf_1_1Data}{Data} are different. \\
+\hline
+\end{DoxyRetVals}
+\mbox{\Hypertarget{classsf_1_1Data_a1544ae4ac13d303ba2e791d12a917737}\label{classsf_1_1Data_a1544ae4ac13d303ba2e791d12a917737}} 
+\index{sf\+::\+Data@{sf\+::\+Data}!set@{set}}
+\index{set@{set}!sf\+::\+Data@{sf\+::\+Data}}
+\subsubsection{\texorpdfstring{set()}{set()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T\+\_\+\+IN $>$ \\
+void sf\+::\+Data\+::set (\begin{DoxyParamCaption}\item[{T\+\_\+\+IN}]{value }\end{DoxyParamCaption})}
+
+
+
+Set value. 
+
+This function set value and type similtaneously. If certain type of value has already been set, the type and value are overwritten by input value. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em value} & value to set. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsf_1_1Data_a5d9c2b395b10b0a6359e6c36ab6a22ff}\label{classsf_1_1Data_a5d9c2b395b10b0a6359e6c36ab6a22ff}} 
+\index{sf\+::\+Data@{sf\+::\+Data}!set@{set}}
+\index{set@{set}!sf\+::\+Data@{sf\+::\+Data}}
+\subsubsection{\texorpdfstring{set()}{set()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void sf\+::\+Data\+::set (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93f}{Type\+\_\+t} \&}]{type,  }\item[{const std\+::string \&}]{value }\end{DoxyParamCaption})}
+
+
+
+Set value. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em type} & type of value \\
+\hline
+\mbox{\tt in}  & {\em value} & value to set \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsf_1_1Data_a3035efa0296877d2ae01ae64733dd2e2}\label{classsf_1_1Data_a3035efa0296877d2ae01ae64733dd2e2}} 
+\index{sf\+::\+Data@{sf\+::\+Data}!type\+Str@{type\+Str}}
+\index{type\+Str@{type\+Str}!sf\+::\+Data@{sf\+::\+Data}}
+\subsubsection{\texorpdfstring{type\+Str()}{typeStr()}}
+{\footnotesize\ttfamily \hyperlink{namespacesf_1_1sql__types_a1a4f114cdf79706d2298e3454006e65b}{sql\+\_\+types\+::\+Type\+Str\+\_\+t} sf\+::\+Data\+::type\+Str (\begin{DoxyParamCaption}\item[{const bool \&}]{print\+\_\+flags = {\ttfamily true} }\end{DoxyParamCaption}) const}
+
+Put type in string style. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em print\+\_\+flags} & If it is true, output string includes flag statements. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em Type\+Str\+\_\+t} & type and flag statements. \\
+\hline
+\end{DoxyRetVals}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/emiew/git/\+Jack\+Of\+All\+Trades/\+Sqlite\+Fetcher/src/Sqlite\+Fetcher.\+hpp\item 
+/home/emiew/git/\+Jack\+Of\+All\+Trades/\+Sqlite\+Fetcher/src/Sqlite\+Fetcher.\+cpp\end{DoxyCompactItemize}

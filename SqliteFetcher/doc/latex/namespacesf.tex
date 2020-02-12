@@ -1,0 +1,338 @@
+\hypertarget{namespacesf}{}\section{sf Namespace Reference}
+\label{namespacesf}\index{sf@{sf}}
+
+
+Sqlite\+Fetcher name space.  
+
+
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacesf_1_1sql__types}{sql\+\_\+types}
+\begin{DoxyCompactList}\small\item\em Sepported types of S\+QL. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classsf_1_1Data}{Data}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classsf_1_1Data}{Data} container class. \end{DoxyCompactList}\item 
+struct \hyperlink{structsf_1_1ExecResult__t}{Exec\+Result\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Output type of \hyperlink{classsf_1_1Fetcher_a1f89a1897ae6f8f4aaf66e4a81a2ac23}{Fetcher\+::exec} function. \end{DoxyCompactList}\item 
+class \hyperlink{classsf_1_1Fetcher}{Fetcher}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classsf_1_1Fetcher}{Fetcher} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacesf_a3cfcc379b8afaf098c4e1aa67ef92186}\label{namespacesf_a3cfcc379b8afaf098c4e1aa67ef92186}} 
+using \hyperlink{namespacesf_a3cfcc379b8afaf098c4e1aa67ef92186}{Binary\+\_\+t} = std\+::vector$<$ int8\+\_\+t $>$
+\begin{DoxyCompactList}\small\item\em Container for binary data. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}\label{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}} 
+using \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} = uint8\+\_\+t
+\begin{DoxyCompactList}\small\item\em Flags for data values. \end{DoxyCompactList}\item 
+using \hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{Column\+\_\+t} = std\+::map$<$ std\+::string, \hyperlink{classsf_1_1Data}{Data} $>$
+\begin{DoxyCompactList}\small\item\em Column type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacesf_a1307fc2d55d71a89cf1ac82655a9b1eb}\label{namespacesf_a1307fc2d55d71a89cf1ac82655a9b1eb}} 
+using \hyperlink{namespacesf_a1307fc2d55d71a89cf1ac82655a9b1eb}{Column\+List\+\_\+t} = std\+::vector$<$ \hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{Column\+\_\+t} $>$
+\begin{DoxyCompactList}\small\item\em Column\+List type. This is a vector of column. \end{DoxyCompactList}\item 
+using \hyperlink{namespacesf_a11fc7064fe56167aaff3e5fea85ac7a2}{Table\+\_\+t} = std\+::map$<$ std\+::string, \hyperlink{namespacesf_a1307fc2d55d71a89cf1ac82655a9b1eb}{Column\+List\+\_\+t} $>$
+\begin{DoxyCompactList}\small\item\em Table type. This has string name as keys and vectors of column data. \end{DoxyCompactList}\item 
+using \hyperlink{namespacesf_a4427debefb8b5121ea783ab2a93a8e50}{Table\+Info\+\_\+t} = std\+::map$<$ std\+::string, \hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{Column\+\_\+t} $>$
+\begin{DoxyCompactList}\small\item\em Table information to determin table schema. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacesf_ad978dd32536dafd22c05284f5c639635}\label{namespacesf_ad978dd32536dafd22c05284f5c639635}} 
+using \hyperlink{namespacesf_ad978dd32536dafd22c05284f5c639635}{Result\+Element\+\_\+t} = std\+::map$<$ std\+::string, std\+::string $>$
+\begin{DoxyCompactList}\small\item\em Element of Result\+\_\+t. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacesf_a32e7fd33812e38a9ac4df7652c3adec2}\label{namespacesf_a32e7fd33812e38a9ac4df7652c3adec2}} 
+using \hyperlink{namespacesf_a32e7fd33812e38a9ac4df7652c3adec2}{Result\+\_\+t} = std\+::vector$<$ \hyperlink{namespacesf_ad978dd32536dafd22c05284f5c639635}{Result\+Element\+\_\+t} $>$
+\begin{DoxyCompactList}\small\item\em Result in output from \hyperlink{classsf_1_1Fetcher_a1f89a1897ae6f8f4aaf66e4a81a2ac23}{Fetcher\+::exec} function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93f}{Type\+\_\+t} \{ \newline
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93faec15ba8dc045b314c2e87121483b79c3}{N\+O\+NE}, 
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fae0641bead659e4a57e95d5b11ffbb75e}{I\+N\+T8}, 
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa22aad51d2bcf8c2982c0062a7209b33c}{I\+N\+T16}, 
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa75189b2710fdf8a9963ff24286fb3b5c}{I\+N\+T32}, 
+\newline
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa2c9e1474c273bc300e25ba8f0433b835}{I\+N\+T64}, 
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa75a55f1e7afbc7511a9b277dd284557b}{U\+I\+N\+T64}, 
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa38c57655742536a74f83bb6ae7f29dbb}{F\+L\+O\+AT}, 
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93faec58a0ab7843e2405f7e17d488276ec1}{D\+O\+U\+B\+LE}, 
+\newline
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fae5d42c228064edbbb67745a310108ff1}{B\+O\+OL}, 
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{T\+E\+XT}, 
+\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fab1a5f83242274532efbe014cbefe8a2a}{B\+L\+OB}
+ \}\begin{DoxyCompactList}\small\item\em Types of data. \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacesf_a50b38ab4427343bee97887908a3fb1c8}\label{namespacesf_a50b38ab4427343bee97887908a3fb1c8}} 
+const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} \hyperlink{namespacesf_a50b38ab4427343bee97887908a3fb1c8}{N\+O\+R\+M\+AL} = 0u
+\begin{DoxyCompactList}\small\item\em Normal, no flags. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacesf_ae3923b5979f4b5e302eabb199e7b8e88}\label{namespacesf_ae3923b5979f4b5e302eabb199e7b8e88}} 
+const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} {\bfseries P\+R\+I\+M\+A\+R\+Y\+\_\+\+K\+EY} = 0b00000001
+\item 
+\mbox{\Hypertarget{namespacesf_acc336fe66c2ccbf55da0fa87dfd3800e}\label{namespacesf_acc336fe66c2ccbf55da0fa87dfd3800e}} 
+const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} {\bfseries U\+N\+I\+Q\+UE} = 0b00000010
+\item 
+\mbox{\Hypertarget{namespacesf_a764109715552c4ed622ce5e1b13fe0e1}\label{namespacesf_a764109715552c4ed622ce5e1b13fe0e1}} 
+const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} {\bfseries A\+U\+T\+O\+\_\+\+I\+N\+C\+R\+E\+M\+E\+NT} = 0b00000100
+\item 
+\mbox{\Hypertarget{namespacesf_a7f47b34eda2fcc2cc1c900419f39b0f0}\label{namespacesf_a7f47b34eda2fcc2cc1c900419f39b0f0}} 
+const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} {\bfseries N\+O\+T\+\_\+\+N\+U\+LL} = 0b00001000
+\item 
+\mbox{\Hypertarget{namespacesf_a4e727b242178ef48270d2cd5754ed94b}\label{namespacesf_a4e727b242178ef48270d2cd5754ed94b}} 
+const \hyperlink{namespacesf_ab38d6ab0cbacec81e7d09c0d53feb958}{Key\+Flag\+\_\+t} {\bfseries D\+E\+F\+A\+U\+LT} = 0b00010000
+\item 
+const std\+::map$<$ \hyperlink{namespacesf_1_1sql__types_a1a4f114cdf79706d2298e3454006e65b}{sql\+\_\+types\+::\+Type\+Str\+\_\+t}, \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93f}{Type\+\_\+t} $>$ \hyperlink{namespacesf_a58f57ec57dddbf6be7dcdbca38e1524f}{Type\+Def}
+\begin{DoxyCompactList}\small\item\em Type conversion into C style. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Sqlite\+Fetcher name space. 
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{namespacesf_a390d6a976138adf32ace872bbd298a30}\label{namespacesf_a390d6a976138adf32ace872bbd298a30}} 
+\index{sf@{sf}!Column\+\_\+t@{Column\+\_\+t}}
+\index{Column\+\_\+t@{Column\+\_\+t}!sf@{sf}}
+\subsubsection{\texorpdfstring{Column\+\_\+t}{Column\_t}}
+{\footnotesize\ttfamily using \hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{sf\+::\+Column\+\_\+t} = typedef std\+::map$<$std\+::string, \hyperlink{classsf_1_1Data}{Data}$>$}
+
+
+
+Column type. 
+
+\subsection*{Column type}
+
+Column\+\_\+t has the string name tags and values.
+
+\subsubsection*{Constructor}
+
+\paragraph*{Setting data types}
+
+
+\begin{DoxyCode}
+\hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{Column\_t} col = \{
+    \{\textcolor{stringliteral}{"ID"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa2c9e1474c273bc300e25ba8f0433b835}{INT64}, PRIMARY\_KEY)\},
+    \{\textcolor{stringliteral}{"First name"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT})\},
+    \{\textcolor{stringliteral}{"Second name"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT})\},
+    \{\textcolor{stringliteral}{"Age"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa75189b2710fdf8a9963ff24286fb3b5c}{INT32})\},
+    \{\textcolor{stringliteral}{"Height\_cm"}, Data(REAL)\},
+    \{\textcolor{stringliteral}{"Weight\_kg"}, Data(REAL)\},
+\};
+\end{DoxyCode}
+
+
+\paragraph*{Setting data values and each type is detemined automatically.}
+
+
+\begin{DoxyCode}
+\hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{Column\_t} col = \{
+    \{\textcolor{stringliteral}{"ID"}, Data(0, PRIMARY\_KEY)\},
+    \{\textcolor{stringliteral}{"First name"}, Data(\textcolor{stringliteral}{"Alina"})\},
+    \{\textcolor{stringliteral}{"Second name"}, Data(\textcolor{stringliteral}{"Rain"})\},
+    \{\textcolor{stringliteral}{"Age"}, Data(28)\},
+    \{\textcolor{stringliteral}{"Height\_cm"}, Data(168.2)\},
+    \{\textcolor{stringliteral}{"Weight\_kg"}, Data(49,3)\},
+\};
+\end{DoxyCode}
+ \paragraph*{Setting data after constructed.}
+
+
+\begin{DoxyCode}
+\hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{Column\_t} col;
+col[\textcolor{stringliteral}{"ID"}] = Data(0, PRIMARY\_KEY);
+col[\textcolor{stringliteral}{"First name"}] = Data(\textcolor{stringliteral}{"Alina"});
+col[\textcolor{stringliteral}{"Second name"}] = Data(\textcolor{stringliteral}{"Rain"});
+col[\textcolor{stringliteral}{"Age"}] = Data(28);
+col[\textcolor{stringliteral}{"Height\_cm"}] = Data(168.2);
+col[\textcolor{stringliteral}{"Weight\_kg"}] = Data(49,3);
+\end{DoxyCode}
+ \mbox{\Hypertarget{namespacesf_a11fc7064fe56167aaff3e5fea85ac7a2}\label{namespacesf_a11fc7064fe56167aaff3e5fea85ac7a2}} 
+\index{sf@{sf}!Table\+\_\+t@{Table\+\_\+t}}
+\index{Table\+\_\+t@{Table\+\_\+t}!sf@{sf}}
+\subsubsection{\texorpdfstring{Table\+\_\+t}{Table\_t}}
+{\footnotesize\ttfamily using \hyperlink{namespacesf_a11fc7064fe56167aaff3e5fea85ac7a2}{sf\+::\+Table\+\_\+t} = typedef std\+::map$<$std\+::string, \hyperlink{namespacesf_a1307fc2d55d71a89cf1ac82655a9b1eb}{Column\+List\+\_\+t}$>$}
+
+
+
+Table type. This has string name as keys and vectors of column data. 
+
+Examples for creating a table.
+
+
+\begin{DoxyCode}
+\hyperlink{namespacesf_a11fc7064fe56167aaff3e5fea85ac7a2}{Table\_t} table = \{
+    \{\textcolor{stringliteral}{"list1"}, column\_list\_1\},
+    \{\textcolor{stringliteral}{"list2"}, column\_list\_2\},
+\};
+\end{DoxyCode}
+
+
+or,
+
+
+\begin{DoxyCode}
+\hyperlink{namespacesf_a11fc7064fe56167aaff3e5fea85ac7a2}{Table\_t} table
+db\_1[\textcolor{stringliteral}{"list1"}] = column\_list\_1;
+db\_1[\textcolor{stringliteral}{"list2"}] = column\_list\_2;
+\end{DoxyCode}
+ \mbox{\Hypertarget{namespacesf_a4427debefb8b5121ea783ab2a93a8e50}\label{namespacesf_a4427debefb8b5121ea783ab2a93a8e50}} 
+\index{sf@{sf}!Table\+Info\+\_\+t@{Table\+Info\+\_\+t}}
+\index{Table\+Info\+\_\+t@{Table\+Info\+\_\+t}!sf@{sf}}
+\subsubsection{\texorpdfstring{Table\+Info\+\_\+t}{TableInfo\_t}}
+{\footnotesize\ttfamily using \hyperlink{namespacesf_a4427debefb8b5121ea783ab2a93a8e50}{sf\+::\+Table\+Info\+\_\+t} = typedef std\+::map$<$std\+::string, \hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{Column\+\_\+t}$>$}
+
+
+
+Table information to determin table schema. 
+
+Exanples for creating a Table\+Info\+\_\+t.
+
+
+\begin{DoxyCode}
+TableInto\_t table\_info = \{
+   \{\textcolor{stringliteral}{"user"}, 
+       \{\textcolor{stringliteral}{"ID"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa2c9e1474c273bc300e25ba8f0433b835}{INT64}, PRIMARY\_KEY | NOT\_NULL)\},
+       \{\textcolor{stringliteral}{"name"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT}, NOT\_NULL)\},
+       \{\textcolor{stringliteral}{"sex"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT})\},
+       \{\textcolor{stringliteral}{"age"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fae0641bead659e4a57e95d5b11ffbb75e}{INT8})\},
+       \{\textcolor{stringliteral}{"countory"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT})\},
+       \{\textcolor{stringliteral}{"height\_cm"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa38c57655742536a74f83bb6ae7f29dbb}{FLOAT})\},
+   \},
+   \{\textcolor{stringliteral}{"area"}, 
+       \{\textcolor{stringliteral}{"ID"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa2c9e1474c273bc300e25ba8f0433b835}{INT64}, PRIMARY\_KEY | NOT\_NULL)\},
+       \{\textcolor{stringliteral}{"countory"}, Data(\textcolor{stringliteral}{"Japan"}, NOT\_NULL | DEFAULT)\},
+       \{\textcolor{stringliteral}{"prefecture"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT})\},
+       \{\textcolor{stringliteral}{"population"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93faec58a0ab7843e2405f7e17d488276ec1}{DOUBLE})\},
+   \},
+\};
+\end{DoxyCode}
+
+
+or,
+
+
+\begin{DoxyCode}
+\hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{Column\_t} user\_col =\{
+    \{\textcolor{stringliteral}{"ID"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa2c9e1474c273bc300e25ba8f0433b835}{INT64}, PRIMARY\_KEY | NOT\_NULL)\},
+    \{\textcolor{stringliteral}{"name"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT}, NOT\_NULL)\},
+    \{\textcolor{stringliteral}{"sex"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT})\},
+    \{\textcolor{stringliteral}{"age"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fae0641bead659e4a57e95d5b11ffbb75e}{INT8})\},
+    \{\textcolor{stringliteral}{"countory"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT})\},
+    \{\textcolor{stringliteral}{"height\_cm"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa38c57655742536a74f83bb6ae7f29dbb}{FLOAT})\},
+\};
+\hyperlink{namespacesf_a390d6a976138adf32ace872bbd298a30}{Column\_t} area\_col =\{
+    \{\textcolor{stringliteral}{"ID"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa2c9e1474c273bc300e25ba8f0433b835}{INT64}, PRIMARY\_KEY | NOT\_NULL)\},
+    \{\textcolor{stringliteral}{"countory"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT}, NOT\_NULL)\},
+    \{\textcolor{stringliteral}{"prefecture"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}{TEXT})\},
+    \{\textcolor{stringliteral}{"population"}, Data(\hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93faec58a0ab7843e2405f7e17d488276ec1}{DOUBLE})\},
+\};
+
+\hyperlink{namespacesf_a4427debefb8b5121ea783ab2a93a8e50}{TableInfo\_t} table\_info;
+table\_info[\textcolor{stringliteral}{"user"}] = user\_col;
+table\_info[\textcolor{stringliteral}{"area"}] = area\_col;
+\end{DoxyCode}
+ 
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93f}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93f}} 
+\index{sf@{sf}!Type\+\_\+t@{Type\+\_\+t}}
+\index{Type\+\_\+t@{Type\+\_\+t}!sf@{sf}}
+\subsubsection{\texorpdfstring{Type\+\_\+t}{Type\_t}}
+{\footnotesize\ttfamily enum \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93f}{sf\+::\+Type\+\_\+t}}
+
+
+
+Types of data. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{N\+O\+NE@{N\+O\+NE}!sf@{sf}}\index{sf@{sf}!N\+O\+NE@{N\+O\+NE}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93faec15ba8dc045b314c2e87121483b79c3}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93faec15ba8dc045b314c2e87121483b79c3}} 
+N\+O\+NE&not defined \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+N\+T8@{I\+N\+T8}!sf@{sf}}\index{sf@{sf}!I\+N\+T8@{I\+N\+T8}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fae0641bead659e4a57e95d5b11ffbb75e}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fae0641bead659e4a57e95d5b11ffbb75e}} 
+I\+N\+T8&int8\+\_\+t \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+N\+T16@{I\+N\+T16}!sf@{sf}}\index{sf@{sf}!I\+N\+T16@{I\+N\+T16}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa22aad51d2bcf8c2982c0062a7209b33c}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa22aad51d2bcf8c2982c0062a7209b33c}} 
+I\+N\+T16&int16\+\_\+t \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+N\+T32@{I\+N\+T32}!sf@{sf}}\index{sf@{sf}!I\+N\+T32@{I\+N\+T32}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa75189b2710fdf8a9963ff24286fb3b5c}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa75189b2710fdf8a9963ff24286fb3b5c}} 
+I\+N\+T32&int32\+\_\+t \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+N\+T64@{I\+N\+T64}!sf@{sf}}\index{sf@{sf}!I\+N\+T64@{I\+N\+T64}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa2c9e1474c273bc300e25ba8f0433b835}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa2c9e1474c273bc300e25ba8f0433b835}} 
+I\+N\+T64&int64\+\_\+t \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{U\+I\+N\+T64@{U\+I\+N\+T64}!sf@{sf}}\index{sf@{sf}!U\+I\+N\+T64@{U\+I\+N\+T64}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa75a55f1e7afbc7511a9b277dd284557b}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa75a55f1e7afbc7511a9b277dd284557b}} 
+U\+I\+N\+T64&uint64\+\_\+t \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{F\+L\+O\+AT@{F\+L\+O\+AT}!sf@{sf}}\index{sf@{sf}!F\+L\+O\+AT@{F\+L\+O\+AT}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa38c57655742536a74f83bb6ae7f29dbb}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa38c57655742536a74f83bb6ae7f29dbb}} 
+F\+L\+O\+AT&float \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{D\+O\+U\+B\+LE@{D\+O\+U\+B\+LE}!sf@{sf}}\index{sf@{sf}!D\+O\+U\+B\+LE@{D\+O\+U\+B\+LE}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93faec58a0ab7843e2405f7e17d488276ec1}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93faec58a0ab7843e2405f7e17d488276ec1}} 
+D\+O\+U\+B\+LE&double \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{B\+O\+OL@{B\+O\+OL}!sf@{sf}}\index{sf@{sf}!B\+O\+OL@{B\+O\+OL}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fae5d42c228064edbbb67745a310108ff1}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fae5d42c228064edbbb67745a310108ff1}} 
+B\+O\+OL&bool \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{T\+E\+XT@{T\+E\+XT}!sf@{sf}}\index{sf@{sf}!T\+E\+XT@{T\+E\+XT}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa193ac55158642f32159ca4b9e7b07c04}} 
+T\+E\+XT&std\+::string \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{B\+L\+OB@{B\+L\+OB}!sf@{sf}}\index{sf@{sf}!B\+L\+OB@{B\+L\+OB}}}\mbox{\Hypertarget{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fab1a5f83242274532efbe014cbefe8a2a}\label{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fab1a5f83242274532efbe014cbefe8a2a}} 
+B\+L\+OB&Binary\+\_\+t. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{namespacesf_a58f57ec57dddbf6be7dcdbca38e1524f}\label{namespacesf_a58f57ec57dddbf6be7dcdbca38e1524f}} 
+\index{sf@{sf}!Type\+Def@{Type\+Def}}
+\index{Type\+Def@{Type\+Def}!sf@{sf}}
+\subsubsection{\texorpdfstring{Type\+Def}{TypeDef}}
+{\footnotesize\ttfamily const std\+::map$<$\hyperlink{namespacesf_1_1sql__types_a1a4f114cdf79706d2298e3454006e65b}{sql\+\_\+types\+::\+Type\+Str\+\_\+t}, \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93f}{Type\+\_\+t}$>$ sf\+::\+Type\+Def}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+\{
+    \{sql\_types::INT, \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa75189b2710fdf8a9963ff24286fb3b5c}{INT32}\},
+        \{sql\_types::INTEGER, INT32\},
+        \{sql\_types::TYNYINT, \hyperlink{namespacesf_1_1sql__types_a37d20d6816136a66e052adb437c9cd9c}{INT8}\},
+        \{sql\_types::SMALLINT, \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa22aad51d2bcf8c2982c0062a7209b33c}{INT16}\},
+        \{sql\_types::MEDIUMINT, INT32\},
+        \{sql\_types::BIGINT, \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fa2c9e1474c273bc300e25ba8f0433b835}{INT64}\},
+        \{sql\_types::UINT64, \hyperlink{namespacesf_1_1sql__types_a8a9315fce8742d77a4f18194d16d6d73}{UINT64}\},
+        \{sql\_types::INT2, INT16\},
+        \{sql\_types::INT4, INT32\},
+        \{sql\_types::INT8, INT64\},
+            \{sql\_types::CHAR, \hyperlink{namespacesf_1_1sql__types_a0b2ac3e64bad9d7879066990a24b2dfe}{TEXT}\},
+            \{sql\_types::CHARACTER, TEXT\},
+        \{sql\_types::VARCHAR, TEXT\},
+        \{sql\_types::VARYING\_CHARACTER, TEXT\},
+        \{sql\_types::NCHAR, TEXT\},
+        \{sql\_types::TEXT, TEXT\},
+        \{sql\_types::CLOB, TEXT\},
+        \{sql\_types::BLOB, \hyperlink{namespacesf_1_1sql__types_a27db7db3803af68b095e51d281ba0abc}{BLOB}\},
+        \{sql\_types::REAL, \hyperlink{namespacesf_1_1sql__types_af88812f4a2ee462fa1b6b1251a42d9f0}{DOUBLE}\},
+        \{sql\_types::DOUBLE, DOUBLE\},
+        \{sql\_types::DOUBLE\_PRECISION, DOUBLE\},
+        \{sql\_types::FLOAT, \hyperlink{namespacesf_1_1sql__types_ad723fc92e8ceaf7a83acfa6c730edb6c}{FLOAT}\},
+        \{sql\_types::NUMERIC, INT64\},
+        \{sql\_types::DECIMAL, DOUBLE\},
+        \{sql\_types::BOOLEAN, \hyperlink{namespacesf_aee849ddcdbf3bdb22d912e4ab0c7b93fae5d42c228064edbbb67745a310108ff1}{BOOL}\},
+        \{sql\_types::DATE, INT64\},
+        \{sql\_types::DATETIME, INT64\}
+    \}
+\end{DoxyCode}
+
+
+Type conversion into C style. 
+
