@@ -228,7 +228,7 @@ One functions to save result of "SELECT" query into ColumnList_t container.
 ## Others
 
 To know about other functions, see documents.<br />
-This project is documented in Doxygen style. If you get documents, simply execute command below after install [Doxygen](http://www.doxygen.nl/i);
+This project is documented in Doxygen style. If you get documents, simply execute command below after install [Doxygen](http://www.doxygen.nl/);
 
 ```
 cd doc
