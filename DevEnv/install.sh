@@ -1,4 +1,8 @@
 #!/bin/bash
+
+git submodule init
+git submodule update
+
 bundledir=$HOME/.vim/bundle
 if [ -e $bundledir ]; then
     echo "$bundledir already exists.\n"
@@ -44,6 +48,8 @@ else
 fi
 gzip -d SKK-JISYO.L.gz
 mv SKK-JISYO.L $eskk
-touch $eskk/.eskk-jisyo
+
+echo "copying templates..."
+cp ./templates/* ~/.vim/bundle/vim-template/templates
 
 echo "Complete."
