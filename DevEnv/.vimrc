@@ -21,6 +21,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'lyuts/vim-rtags'
 "novel c-completer
 Plugin 'Valloric/YouCompleteMe'
+"python syntax checker
+Plugin 'dense-analysis/ale'
 "simple template
 Plugin 'aperezdc/vim-template'
 "terminal in buffer
@@ -46,9 +48,10 @@ autocmd! BufRead,BufNewFile *.launch setfiletype xml
 autocmd! BufRead,BufNewFile *.urdf setfiletype xml
 
 "----- setting for eskk -----
+language mes en_US.utf8
 let g:eskk#directory = "~/.eskk"
-let g:eskk#dictionary = { 'path': "~/.eskk/SKK-JISYO.L", 'sorted':1, 'encoding': 'euc-jp', }
-let g:eskk#enable_completion = 1
+let g:eskk#large_dictionary = { 'path': "~/.eskk/SKK-JISYO.L", 'sorted':1, 'encoding': 'euc-jp', }
+let g:eskk#dictionary = { 'path': "~/.eskk/.skk-jisyo", 'sorted':0, 'encoding': 'utf-8', }
 
 "----- setting for color scheme -----
 syntax enable
