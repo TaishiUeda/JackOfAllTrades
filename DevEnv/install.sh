@@ -13,6 +13,17 @@ fi
 echo "Vundle.vim is copied to $bundledir\n"
 cp -r Vundle.vim $bundledir
 
+molokaidir=$HOME/.vim/bundle/molokai
+if [ -e $molokaidir ]; then
+    echo "$molokaidir already exists.\n"
+else
+    echo "$molokaidir is made.\n"
+    mkdir -p $molokaidir
+fi
+echo "molokai is copied to $bundledir\n"
+cp -r molokai $bundledir
+cp -r molokai/colors $HOME/.vim/colors
+
 vimrc=$HOME/.vimrc
 if [ -e $vimrc ]; then
     read -p $vimrc" already exists. Do you overwrite it? (y/N): " yn
