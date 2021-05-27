@@ -20,10 +20,10 @@ RUN groupadd -g 1000 developer && \
 
 USER ${user}
 WORKDIR /home/${user}
-RUN git clone https://${git_user}:${git_pwd}@github.com/TaishiUeda/JackOfAllTrades.git
 # RUN git clone https://${git_user}:${git_pwd}@github.com/TaishiUeda/JackOfAllTrades.git && \
 #     cd JackOfAllTrades/DevEnv && \
 #     ./install.sh
+RUN git clone https://${git_user}:${git_pwd}@github.com/TaishiUeda/JackOfAllTrades.git
 
 ENV TERM=xterm-256color 
 ENV DISPLAY host.docker.internal:0.0

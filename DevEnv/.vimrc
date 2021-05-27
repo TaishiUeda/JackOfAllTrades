@@ -48,7 +48,7 @@ autocmd! BufRead,BufNewFile *.launch setfiletype xml
 autocmd! BufRead,BufNewFile *.urdf setfiletype xml
 
 "----- setting for eskk -----
-language mes en_US.utf8
+" language mes en_US.utf8
 let g:eskk#directory = "~/.eskk"
 let g:eskk#large_dictionary = { 'path': "~/.eskk/SKK-JISYO.L", 'sorted':1, 'encoding': 'euc-jp', }
 let g:eskk#dictionary = { 'path': "~/.eskk/.skk-jisyo", 'sorted':0, 'encoding': 'utf-8', }
