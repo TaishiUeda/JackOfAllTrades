@@ -25,8 +25,6 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'dense-analysis/ale'
 "simple template
 Plugin 'aperezdc/vim-template'
-"terminal in buffer
-Plugin 'wkentaro/conque.vim'
 "SKK for vim
 Plugin 'tyru/eskk.vim'
 "tag jump extention for xml files
@@ -38,14 +36,23 @@ Plugin 'tomasr/molokai'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-"----- key map for conuqe term -----
-noremap mx :ConqueTerm zsh
-noremap vmx :ConqueTermVSplit zsh
-noremap nmx :ConqueTermSplit zsh
+"---- setting for YCM ----
+let g:ycm_python_interpreter_path = 'py'
+let g:syntastic_python_checkers=['pylint']
 
-"----- set xml syntax as ros config syntax ----
-autocmd! BufRead,BufNewFile *.launch setfiletype xml
-autocmd! BufRead,BufNewFile *.urdf setfiletype xml
+"----- key map for conuqe term -----
+noremap mx :terminal ++curwin ++noclose
+noremap vmx :vert terminal 
+noremap nmx :terminal
+
+augroup vimrc
+    autocmd!
+    "---- set xml syntax as ros config syntax ----
+    autocmd BufRead,BufNewFile *.launch setfiletype xml
+    autocmd BufRead,BufNewFile *.urdf setfiletype xml
+    "---- spec check ----
+    autocmd BufRead,BufNewFile *.txt,*.md setlocal spell spelllang=en_us
+augroup END
 
 "----- setting for eskk -----
 " language mes en_US.utf8
