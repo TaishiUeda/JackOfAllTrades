@@ -39,8 +39,8 @@ vim -c "BundleUpdate" -c qa
 
 echo "Installing YouCompleteMe..."
 cd $bundledir/YouCompleteMe
-sudo apt install build-essential cmake vim-nox python3-dev
-sudo apt install mono-complete golang nodejs default-jdk npm
+sudo apt install -y build-essential cmake vim-nox python3-dev
+sudo apt install -y mono-complete golang nodejs default-jdk npm
 python3 install.py --all
 
 echo "Install python syntax checker..."
