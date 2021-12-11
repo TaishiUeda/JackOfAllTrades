@@ -48,7 +48,8 @@ sudo apt install -y python3-pip pylint flake8
 python3 -m pip install pylint flake8
 
 echo "Downloading SKK dictionary..."
-curl -O http://openlab.jp/skk/dic/SKK-JISYO.L.gz
+sudo apt install -y curl
+curl -O http://openlab.ring.gr.jp/skk/skk/dic/SKK-JISYO.L
 
 eskk=$HOME/.eskk
 if [ -e $eskk ]; then
@@ -57,7 +58,6 @@ else
     mkdir -p $eskk
     echo "$eskk is made.\n"
 fi
-gzip -d SKK-JISYO.L.gz
 mv SKK-JISYO.L $eskk
 
 echo "copying templates..."
