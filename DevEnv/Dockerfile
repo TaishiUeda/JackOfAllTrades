@@ -6,11 +6,11 @@ ARG ssh_dir
 
 USER root
 RUN apt-get update
-RUN apt-get install -y sudo git vim
+RUN apt-get install -y sudo git vim openssh-client
 
 USER ${USER}
 WORKDIR /home/${USER}
-RUN --mount=type=ssh git clone git@github.com:TaishiUeda/JackOfAllTrades.git && \
+RUN git clone https://github.com/TaishiUeda/JackOfAllTrades.git && \
     cd JackOfAllTrades/DevEnv && \
     ./install.sh
 
