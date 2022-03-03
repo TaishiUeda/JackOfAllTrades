@@ -10,7 +10,7 @@ RUN apt-get install -y sudo git vim
 
 USER ${USER}
 WORKDIR /home/${USER}
-RUN --mount=type=ssh git clone git@github.com:TaishiUeda/JackOfAllTrades.git
+RUN --mount=type=ssh git clone git@github.com:TaishiUeda/JackOfAllTrades.git && \
     cd JackOfAllTrades/DevEnv && \
     ./install.sh
 
