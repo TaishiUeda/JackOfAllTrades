@@ -22,7 +22,7 @@ else
 fi
 echo "molokai is copied to $bundledir\n"
 cp -r molokai $bundledir
-cp -r molokai/colors $HOME/.vim/colors
+cp -r molokai/colors $HOME/.vim/
 
 vimrc=$HOME/.vimrc
 if [ -e $vimrc ]; then
