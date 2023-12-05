@@ -3,6 +3,8 @@
 git submodule init
 git submodule update
 
+orgdir=$(pwd)
+
 bundledir=$HOME/.vim/bundle
 if [ -e $bundledir ]; then
     echo "$bundledir already exists.\n"
@@ -61,6 +63,7 @@ fi
 mv SKK-JISYO.L $eskk
 
 echo "copying templates..."
+cd $orgdir
 cp ./templates/* ~/.vim/bundle/vim-template/templates
 
 echo "Complete."
