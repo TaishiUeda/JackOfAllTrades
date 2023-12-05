@@ -35,7 +35,7 @@ fi
 cp .vimrc $HOME
 
 echo "Installing bundle plugins..."
-vim -c "BundleUpdate" -c qa
+vim -c "BundleUpdate" -c "source %" -c "PluginInstall" -c "call mkdp#util#install()" -c qa
 
 echo "Installing YouCompleteMe..."
 cd $bundledir/YouCompleteMe
