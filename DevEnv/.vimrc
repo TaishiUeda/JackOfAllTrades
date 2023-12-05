@@ -31,6 +31,10 @@ Plugin 'tyru/eskk.vim'
 Plugin 'tmhedberg/matchit'
 "molokai color scheme
 Plugin 'tomasr/molokai'
+"Markdown preview
+Plugin 'iamcco/markdown-preview.nvim'
+"plantUML syntax highliting
+Plugin 'aklt/plantuml-syntax'
 "--------- end -----------------------
 
 call vundle#end()            " required
@@ -59,6 +63,10 @@ augroup END
 let g:eskk#directory = "~/.eskk"
 let g:eskk#large_dictionary = { 'path': "~/.eskk/SKK-JISYO.L", 'sorted':1, 'encoding': 'euc-jp', }
 let g:eskk#dictionary = { 'path': "~/.eskk/.skk-jisyo", 'sorted':0, 'encoding': 'utf-8', }
+
+"----- setting for markdown preview -----
+let g:mkdp_refresh_slow = 1
+let g:mkdp_command_for_global = 1
 
 "----- setting for color scheme -----
 syntax enable
