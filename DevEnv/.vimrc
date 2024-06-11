@@ -70,6 +70,10 @@ let g:eskk#dictionary = { 'path': "~/.eskk/.skk-jisyo", 'sorted':0, 'encoding': 
 let g:mkdp_refresh_slow = 1
 let g:mkdp_command_for_global = 1
 
+"----- setting for autopep8 -----
+let g:autopep8_max_line_length=100
+let g:autopep8_ignore="E226,E266"
+
 "----- setting for color scheme -----
 syntax enable
 colorscheme molokai
