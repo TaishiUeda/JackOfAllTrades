@@ -35,6 +35,8 @@ Plugin 'tomasr/molokai'
 Plugin 'iamcco/markdown-preview.nvim'
 "plantUML syntax highliting
 Plugin 'aklt/plantuml-syntax'
+"auto formatter according to pep8
+Plugin 'tell-k/vim-autopep8'
 "--------- end -----------------------
 
 call vundle#end()            " required
